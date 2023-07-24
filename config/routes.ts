@@ -29,6 +29,23 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/dashboard',
+    name: 'dashboard',
+    icon: 'dashboard',
+    routes: [
+      {
+        path: '/dashboard/analysis',
+        name: 'analysis',
+        component: './Dashboard/Analysis',
+      },
+      {
+        path: '/dashboard/monitor',
+        name: 'monitor',
+        component: './Dashboard/Monitor',
+      }
+    ],
+  },
+  {
     path: '/admin',
     name: 'admin',
     icon: 'crown',
