@@ -2,18 +2,16 @@
 
 This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
 
+## Node version
+
+Node version should be 18.0.0 or above.
+
 ## Environment Prepare
 
 Install `node_modules`:
 
 ```bash
-npm install
-```
-
-or
-
-```bash
-yarn
+pnpm install
 ```
 
 ## Provided Scripts
@@ -25,7 +23,7 @@ Scripts provided in `package.json`. It's safe to modify or add additional script
 ### Start project
 
 ```bash
-npm start
+yarn start
 ```
 
 ### Build project
