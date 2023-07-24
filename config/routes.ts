@@ -63,6 +63,28 @@ export default [
     ],
   },
   {
+    name: 'system',
+    icon: 'setting',
+    path: '/system',
+    routes: [
+      {
+        name: 'user',
+        path: '/system/user',
+        component: './System/User',
+      },
+      {
+        name: 'role',
+        path: '/system/role',
+        component: './System/Role',
+      },
+      {
+        name: 'menu',
+        path: '/system/menu',
+        component: './System/Menu',
+      }
+    ]
+  },
+  {
     name: 'list.table-list',
     icon: 'table',
     path: '/list',
