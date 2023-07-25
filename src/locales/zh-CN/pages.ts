@@ -62,4 +62,11 @@ export default {
   'pages.searchTable.tenThousand': '万',
   'pages.searchTable.batchDeletion': '批量删除',
   'pages.searchTable.batchApproval': '批量审批',
+  'pages.system.menu.table.title': '菜单列表',
+  'pages.system.menu.column.name': '菜单名称',
+  'pages.system.menu.column.icon': '菜单图标',
+  'pages.system.menu.column.index': '菜单排序',
+  'pages.system.menu.column.path': '菜单路径',
+  'pages.system.menu.column.enabled': '菜单状态',
+  'pages.system.menu.column.createdAt': '创建时间',
 };

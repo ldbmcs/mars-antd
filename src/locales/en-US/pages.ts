@@ -65,4 +65,11 @@ export default {
   'pages.searchTable.tenThousand': '0000',
   'pages.searchTable.batchDeletion': 'batch deletion',
   'pages.searchTable.batchApproval': 'batch approval',
+  'pages.system.menu.column.name': 'Menu Name',
+  'pages.system.menu.column.icon': 'Menu Icon',
+  'pages.system.menu.column.index': 'Menu Index',
+  'pages.system.menu.column.path': 'Menu Path',
+  'pages.system.menu.column.enabled': 'Menu Enabled',
+  'pages.system.menu.column.createdAt': 'Created At',
+
 };

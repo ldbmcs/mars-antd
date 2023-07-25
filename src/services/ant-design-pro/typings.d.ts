@@ -98,4 +98,21 @@ declare namespace API {
     description?: string;
     type?: NoticeIconItemType;
   };
+
+  type MenuListItem = {
+    id?: string;
+    name?: string;
+    path?: string;
+    icon?: string;
+    index?: number;
+    enabled?: number;
+    createdAt?: string;
+  }
+
+  type MenuList = {
+    data?: MenuListItem[];
+    total?: number;
+    success?: boolean;
+  };
+
 }
