@@ -115,4 +115,19 @@ declare namespace API {
     success?: boolean;
   };
 
+
+  type RoleListItem = {
+    id?: string;
+    name?: string;
+    code?: string;
+    enabled?: number;
+    createdAt?: string;
+  }
+
+  type RoleList = {
+    data?: RoleListItem[];
+    total?: number;
+    success?: boolean;
+  }
+
 }

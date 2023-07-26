@@ -70,6 +70,16 @@ export async function menu(params: {current?:number;pageSize?:number}, options?:
   });
 }
 
+export async function role(params: {current?:number;pageSize?:number}, options?: { [key: string]: any }) {
+  return request<API.RoleList>('/api/role', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** 新建规则 PUT /api/rule */
 export async function updateRule(options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/rule', {
