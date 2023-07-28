@@ -1,17 +1,9 @@
-import {addRule, removeRule, role, updateRule} from '@/services/ant-design-pro/api';
+import {addRule, removeRule, updateRule, user} from '@/services/ant-design-pro/api';
 import {PlusOutlined} from '@ant-design/icons';
 import type {ActionType, ProColumns} from '@ant-design/pro-components';
-import {
-  FooterToolbar,
-  ModalForm,
-  ProFormText,
-  ProFormTextArea,
-  ProFormTreeSelect,
-  ProTable,
-} from '@ant-design/pro-components';
+import {FooterToolbar, ModalForm, ProFormText, ProFormTextArea, ProTable,} from '@ant-design/pro-components';
 import {Button, message, Popconfirm} from 'antd';
 import React, {useRef, useState} from 'react';
-import treeData from "@/pages/System/Role/TreeData";
 
 const handleAdd = async (fields: API.RuleListItem) => {
   const hide = message.loading('正在保存');
@@ -80,15 +72,14 @@ const handleSingleDelete = async (e?: React.MouseEvent<HTMLElement>) => {
 const UsersTable: React.FC = () => {
   const [createModalOpen, handleModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
-  const [permissionModalOpen, handlePermissionModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
-  const columns: ProColumns<API.RoleListItem>[] = [
+  const columns: ProColumns<API.UserListItem>[] = [
     {
-      title: '角色名称',
-      dataIndex: 'name',
+      title: '用户名称',
+      dataIndex: 'nickname',
     },
     {
       title: '状态',
@@ -117,15 +108,6 @@ const UsersTable: React.FC = () => {
       valueType: 'option',
       render: (_, record) => [
         <a
-          key="permission"
-          onClick={() => {
-            handlePermissionModalOpen(true);
-            setCurrentRow(record);
-          }}
-        >
-          {'分配权限'}
-        </a>,
-        <a
           key="edit"
           onClick={() => {
             handleUpdateModalOpen(true);
@@ -135,7 +117,7 @@ const UsersTable: React.FC = () => {
           {'编辑'}
         </a>,
         <Popconfirm
-          title="是否要删除这个角色?"
+          title="是否要删除这个用户?"
           onConfirm={handleSingleDelete}
           okText="确认"
           cancelText="取消"
@@ -151,12 +133,10 @@ const UsersTable: React.FC = () => {
 
   return (
     <>
-      <ProTable<API.MenuListItem, API.PageParams>
+      <ProTable<API.UserListItem, API.PageParams>
         actionRef={actionRef}
         rowKey="id"
-        search={{
-          labelWidth: 120,
-        }}
+        search={false}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -168,7 +148,7 @@ const UsersTable: React.FC = () => {
             <PlusOutlined/> {'新建'}
           </Button>,
         ]}
-        request={role}
+        request={user}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -198,28 +178,7 @@ const UsersTable: React.FC = () => {
         </FooterToolbar>
       )}
       <ModalForm
-        title={'分配权限'}
-        width="400px"
-        open={permissionModalOpen}
-        onOpenChange={handlePermissionModalOpen}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
-          if (success) {
-            handleModalOpen(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormTreeSelect request={async () => {
-          return treeData
-        }} fieldProps={{
-          treeCheckable: true,
-        }}/>
-      </ModalForm>
-      <ModalForm
-        title={'新建角色'}
+        title={'新建用户'}
         width="400px"
         open={createModalOpen}
         onOpenChange={handleModalOpen}
@@ -246,7 +205,7 @@ const UsersTable: React.FC = () => {
         <ProFormTextArea width="md" name="desc"/>
       </ModalForm>
       <ModalForm
-        title={'编辑角色'}
+        title={'编辑用户'}
         width="400px"
         open={updateModalOpen}
         onOpenChange={handleModalOpen}

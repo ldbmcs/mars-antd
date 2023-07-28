@@ -130,4 +130,18 @@ declare namespace API {
     success?: boolean;
   }
 
+
+  type UserListItem = {
+    id?: string;
+    username?: string;
+    nickname?: string;
+    enabled?: number;
+    createdAt?: string;
+  }
+
+  type UserList = {
+    data?: UserListItem[];
+    total?: number;
+    success?: boolean;
+  }
 }
