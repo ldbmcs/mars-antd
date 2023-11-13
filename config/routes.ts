@@ -46,23 +46,6 @@ export default [
     ],
   },
   {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    routes: [
-      {
-        path: '/admin',
-        redirect: '/admin/sub-page',
-      },
-      {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
-      },
-    ],
-  },
-  {
     name: 'system',
     icon: 'setting',
     path: '/system',
@@ -73,22 +56,36 @@ export default [
         component: './System/User',
       },
       {
+        name: 'menu',
+        path: '/system/menu',
+        component: './System/Menu',
+      },
+      {
         name: 'role',
         path: '/system/role',
         component: './System/Role',
       },
       {
-        name: 'menu',
-        path: '/system/menu',
-        component: './System/Menu',
-      }
+        name: 'dept',
+        path: '/system/dept',
+        component: './System/Dept',
+      },
+      {
+        name: 'dict',
+        path: '/system/dict',
+        component: './System/Dict',
+      },
+      {
+        name: 'param',
+        path: '/system/param',
+        component: './System/Param',
+      },
+      {
+        name: 'log',
+        path: '/system/log',
+        component: './System/Log',
+      },
     ]
-  },
-  {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
   },
   {
     path: '/',

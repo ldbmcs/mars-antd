@@ -4,6 +4,7 @@ import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {FooterToolbar, ModalForm, ProFormText, ProFormTextArea, ProTable,} from '@ant-design/pro-components';
 import {Button, message, Popconfirm} from 'antd';
 import React, {useRef, useState} from 'react';
+import {useIntl} from "@@/exports";
 
 const handleAdd = async (fields: API.RuleListItem) => {
   const hide = message.loading('正在保存');
@@ -76,10 +77,13 @@ const UsersTable: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
+  const intl = useIntl();
+
   const columns: ProColumns<API.UserListItem>[] = [
     {
       title: '用户名称',
       dataIndex: 'nickname',
+      hideInSearch: false,
     },
     {
       title: '状态',
@@ -134,9 +138,12 @@ const UsersTable: React.FC = () => {
   return (
     <>
       <ProTable<API.UserListItem, API.PageParams>
+        headerTitle={intl.formatMessage({
+          id: 'pages.system.user.table.title',
+          defaultMessage: '用户列表',
+        })}
         actionRef={actionRef}
         rowKey="id"
-        search={false}
         toolBarRender={() => [
           <Button
             type="primary"

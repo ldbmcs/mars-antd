@@ -1,16 +1,21 @@
-import {ProCard} from "@ant-design/pro-components";
+import {GridContent, PageContainer} from "@ant-design/pro-components";
 import React from "react";
-import UsersTable from "@/pages/System/User/components/UsersTable";
-import DepartmentsTree from "@/pages/System/User/components/DepartmentsTree";
+import UsersTable from "./components/UsersTable";
+import DepartmentsTree from "./components/DepartmentsTree";
+import {Col, Row} from "antd";
 
 const Users: React.FC = () => {
-  return <ProCard split="vertical">
-    <ProCard title="部门列表" colSpan="30%">
-      <DepartmentsTree />
-    </ProCard>
-    <ProCard title="用户列表">
-      <UsersTable />
-    </ProCard>
-  </ProCard>;
+  return <PageContainer>
+    <GridContent>
+      <Row gutter={24}>
+        <Col xs={24} sm={24} md={12} lg={5}>
+          <DepartmentsTree/>
+        </Col>
+        <Col xs={24} sm={24} md={18} lg={19}>
+          <UsersTable/>
+        </Col>
+      </Row>
+    </GridContent>
+  </PageContainer>
 }
 export default Users;

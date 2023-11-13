@@ -6,13 +6,12 @@ import {
     ModalForm,
     PageContainer,
     ProFormText,
-    ProFormTextArea, ProFormTreeSelect,
-    ProTable,
+    ProFormTextArea, ProTable,
 } from '@ant-design/pro-components';
 import {Button, message, Popconfirm} from 'antd';
 import React, {useRef, useState} from 'react';
 import type {FormValueType} from './components/UpdateForm';
-import treeData from "@/pages/System/Role/TreeData";
+import UpdateForm from "./components/UpdateForm";
 
 const handleAdd = async (fields: API.RuleListItem) => {
     const hide = message.loading('正在保存');
@@ -81,7 +80,6 @@ const handleSingleDelete = async (e?: React.MouseEvent<HTMLElement>) => {
 const Role: React.FC = () => {
     const [createModalOpen, handleModalOpen] = useState<boolean>(false);
     const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
-    const [permissionModalOpen, handlePermissionModalOpen] = useState<boolean>(false);
     const actionRef = useRef<ActionType>();
     const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
     const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
@@ -117,15 +115,6 @@ const Role: React.FC = () => {
             dataIndex: 'option',
             valueType: 'option',
             render: (_, record) => [
-                <a
-                    key="permission"
-                    onClick={() => {
-                        handlePermissionModalOpen(true);
-                        setCurrentRow(record);
-                    }}
-                >
-                    {'分配权限'}
-                </a>,
                 <a
                     key="edit"
                     onClick={() => {
@@ -200,25 +189,6 @@ const Role: React.FC = () => {
                 </FooterToolbar>
             )}
             <ModalForm
-                title={'分配权限'}
-                width="400px"
-                open={permissionModalOpen}
-                onOpenChange={handlePermissionModalOpen}
-                onFinish={async (value) => {
-                    const success = await handleAdd(value as API.RuleListItem);
-                    if (success) {
-                        handleModalOpen(false);
-                        if (actionRef.current) {
-                            actionRef.current.reload();
-                        }
-                    }
-                }}
-            >
-                <ProFormTreeSelect request={async () => {return treeData}}  fieldProps={{
-                    treeCheckable: true,
-                }}/>
-            </ModalForm>
-            <ModalForm
                 title={'新建角色'}
                 width="400px"
                 open={createModalOpen}
@@ -245,38 +215,23 @@ const Role: React.FC = () => {
                 />
                 <ProFormTextArea width="md" name="desc"/>
             </ModalForm>
-            <ModalForm
-                title={'编辑角色'}
-                width="400px"
-                open={updateModalOpen}
-                onOpenChange={handleModalOpen}
-                // defaultValue={currentRow}
-                // onCancel={() => {
-                //   handleUpdateModalOpen(false);
-                // }}
-                onFinish={async (value) => {
-                    const success = await handleUpdate(value);
-                    if (success) {
-                        handleUpdateModalOpen(false);
-                        setCurrentRow(undefined);
-                        if (actionRef.current) {
-                            actionRef.current.reload();
-                        }
-                    }
-                }}
-            >
-                <ProFormText
-                    rules={[
-                        {
-                            required: true,
-                            message: '角色名称为必填项',
-                        },
-                    ]}
-                    width="md"
-                    name="name"
-                />
-                <ProFormTextArea width="md" name="desc"/>
-            </ModalForm>
+          <UpdateForm
+            onSubmit={async (value) => {
+              const success = await handleUpdate(value);
+              if (success) {
+                handleUpdateModalOpen(false);
+                setCurrentRow(undefined);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }
+            }}
+            onCancel={() => {
+              handleUpdateModalOpen(false);
+            }}
+            updateModalOpen={updateModalOpen}
+            values={currentRow || {}}
+          />
         </PageContainer>
     );
 };
