@@ -1,25 +1,18 @@
-import {addRule, menu, removeRule, updateRule} from '@/services/ant-design-pro/api';
-import {PlusOutlined} from '@ant-design/icons';
-import type {ActionType, ProColumns} from '@ant-design/pro-components';
-import {
-  FooterToolbar,
-  ModalForm,
-  PageContainer,
-  ProFormText,
-  ProFormTextArea,
-  ProTable,
-} from '@ant-design/pro-components';
-import {FormattedMessage, useIntl} from '@umijs/max';
-import {Button, message, Popconfirm} from 'antd';
-import React, {useRef, useState} from 'react';
-import type {FormValueType} from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
-import Icon from "@/components/UI/Icon";
+import Icon from '@/components/UI/Icon';
+import SaveOrUpdateUserForm from '@/pages/System/Menu/components/SaveOrUpdateMenuForm';
+import { FormValueType } from '@/pages/TableList/components/UpdateForm';
+import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
+import { menus } from '@/services/ant-design-pro/menu';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
+import { Button, message, Popconfirm, Switch } from 'antd';
+import React, { useRef, useState } from 'react';
 
 const handleAdd = async (fields: API.RuleListItem) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({...fields});
+    await addRule({ ...fields });
     hide();
     message.success('Added successfully');
     return true;
@@ -78,85 +71,48 @@ const handleSingleDelete = async (e?: React.MouseEvent<HTMLElement>) => {
     hide();
     message.error('Delete failed, please try again');
   }
-}
+};
 
 const Menu: React.FC = () => {
-  const [createModalOpen, handleModalOpen] = useState<boolean>(false);
+  const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
-  const intl = useIntl();
-
   const columns: ProColumns<API.MenuListItem>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menu.column.name"
-          defaultMessage="Rule name"
-        />
-      ),
+      title: '名称',
       dataIndex: 'name',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menu.column.icon"
-          defaultMessage="Menu icon"
-        />
-      ),
+      title: 'icon',
       dataIndex: 'icon',
       hideInForm: true,
       hideInSearch: true,
-      render: () => <Icon icon='SmileOutlined' />,
+      render: () => <Icon icon="SmileOutlined" />,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menu.column.index"
-          defaultMessage="Menu index"
-        />
-      ),
-      dataIndex: 'index',
+      title: '排序',
+      dataIndex: 'sort',
       hideInForm: true,
       hideInSearch: true,
     },
     {
-      title: <FormattedMessage id="pages.system.menu.column.enabled" defaultMessage="Enabled"/>,
+      title: '状态',
       dataIndex: 'enabled',
-      hideInForm: true,
-      valueEnum: {
-        0: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
-            />
-          ),
-          status: 'Default',
-        },
-        1: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running"/>
-          ),
-          status: 'Processing',
-        },
-      },
+      valueType: 'switch',
+      hideInSearch: true,
+      render: (item, props) => <Switch checked={props.enabled === 1} />,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.menu.column.createdAt"
-          defaultMessage="Created time"
-        />
-      ),
+      title: '创建时间',
       sorter: true,
       dataIndex: 'createdAt',
       valueType: 'dateTime',
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating"/>,
+      title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -167,23 +123,17 @@ const Menu: React.FC = () => {
             setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="common.action.edit" defaultMessage="Edit"/>
+          {'编辑'}
         </a>,
         <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
+          title="是否要删除这个菜单?"
           onConfirm={handleSingleDelete}
           okText="Yes"
           cancelText="No"
           key="delete"
         >
-          <a>
-            <FormattedMessage
-              id="common.action.delete"
-              defaultMessage="Delete"
-            />
-          </a>
-        </Popconfirm>
+          <a>{'删除'}</a>
+        </Popconfirm>,
       ],
     },
   ];
@@ -191,10 +141,7 @@ const Menu: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.MenuListItem, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.system.menu.table.title',
-          defaultMessage: 'Menu list',
-        })}
+        headerTitle={'菜单列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -205,13 +152,13 @@ const Menu: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              handleModalOpen(true);
+              handleCreateModalOpen(true);
             }}
           >
-            <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
+            <PlusOutlined /> {'新建'}
           </Button>,
         ]}
-        request={menu}
+        request={menus}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -223,18 +170,9 @@ const Menu: React.FC = () => {
         <FooterToolbar
           extra={
             <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen"/>{' '}
-              <a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项"/>
-              &nbsp;&nbsp;
-              <span>
-                <FormattedMessage
-                  id="pages.searchTable.totalServiceCalls"
-                  defaultMessage="Total number of service calls"
-                />{' '}
-                {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)}{' '}
-                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万"/>
-              </span>
+              {'已选择 '}
+              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>
+              {' 项'}
             </div>
           }
         >
@@ -245,49 +183,28 @@ const Menu: React.FC = () => {
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            <FormattedMessage
-              id="pages.searchTable.batchDeletion"
-              defaultMessage="Batch deletion"
-            />
+            {'批量删除'}
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'New rule',
-        })}
-        width="400px"
+      <SaveOrUpdateUserForm
+        title={'新建'}
         open={createModalOpen}
-        onOpenChange={handleModalOpen}
-        onFinish={async (value) => {
+        onOpenChange={handleCreateModalOpen}
+        onSubmit={async (value) => {
           const success = await handleAdd(value as API.RuleListItem);
           if (success) {
-            handleModalOpen(false);
+            handleCreateModalOpen(false);
             if (actionRef.current) {
               actionRef.current.reload();
             }
           }
         }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
-                />
-              ),
-            },
-          ]}
-          width="md"
-          name="name"
-        />
-        <ProFormTextArea width="md" name="desc"/>
-      </ModalForm>
-      <UpdateForm
+      />
+      <SaveOrUpdateUserForm
+        title={'编辑'}
+        open={updateModalOpen}
+        onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {
@@ -298,11 +215,7 @@ const Menu: React.FC = () => {
             }
           }
         }}
-        onCancel={() => {
-          handleUpdateModalOpen(false);
-        }}
-        updateModalOpen={updateModalOpen}
-        values={currentRow || {}}
+        values={currentRow}
       />
     </PageContainer>
   );

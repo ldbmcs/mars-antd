@@ -1,11 +1,12 @@
-import {menu, removeRule, updateRule} from '@/services/ant-design-pro/api';
-import {PlusOutlined} from '@ant-design/icons';
-import type {ActionType, ProColumns} from '@ant-design/pro-components';
-import {FooterToolbar, PageContainer, ProTable,} from '@ant-design/pro-components';
-import {FormattedMessage, useIntl} from '@umijs/max';
-import {Button, message, Popconfirm} from 'antd';
-import React, {useRef, useState} from 'react';
-import type {FormValueType} from './components/UpdateForm';
+import { removeRule, updateRule } from '@/services/ant-design-pro/api';
+import { menus } from '@/services/ant-design-pro/menu';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
+import { FormattedMessage, useIntl } from '@umijs/max';
+import { Button, message, Popconfirm } from 'antd';
+import React, { useRef, useState } from 'react';
+import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 
 const handleUpdate = async (fields: FormValueType) => {
@@ -56,7 +57,7 @@ const handleSingleDelete = async (e?: React.MouseEvent<HTMLElement>) => {
     hide();
     message.error('Delete failed, please try again');
   }
-}
+};
 
 const Dept: React.FC = () => {
   const [modalOpen, handleModalOpen] = useState<boolean>(false);
@@ -68,36 +69,21 @@ const Dept: React.FC = () => {
 
   const columns: ProColumns<API.MenuListItem>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.dept.column.name"
-          defaultMessage="名称"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.dept.column.name" defaultMessage="名称" />,
       dataIndex: 'name',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.dept.column.code"
-          defaultMessage="编码"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.dept.column.code" defaultMessage="编码" />,
       dataIndex: 'code',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.system.dept.column.index"
-          defaultMessage="排序"
-        />
-      ),
+      title: <FormattedMessage id="pages.system.dept.column.index" defaultMessage="排序" />,
       dataIndex: 'index',
       hideInForm: true,
       hideInSearch: true,
     },
     {
-      title: <FormattedMessage id="pages.system.dept.column.enabled" defaultMessage="状态"/>,
+      title: <FormattedMessage id="pages.system.dept.column.enabled" defaultMessage="状态" />,
       dataIndex: 'enabled',
       hideInForm: true,
       valueEnum: {
@@ -112,7 +98,7 @@ const Dept: React.FC = () => {
         },
         1: {
           text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running"/>
+            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
           ),
           status: 'Processing',
         },
@@ -120,17 +106,14 @@ const Dept: React.FC = () => {
     },
     {
       title: (
-        <FormattedMessage
-          id="pages.system.menu.column.createdAt"
-          defaultMessage="Created time"
-        />
+        <FormattedMessage id="pages.system.menu.column.createdAt" defaultMessage="Created time" />
       ),
       sorter: true,
       dataIndex: 'createdAt',
       valueType: 'dateTime',
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating"/>,
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -141,7 +124,7 @@ const Dept: React.FC = () => {
             setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="common.action.edit" defaultMessage="Edit"/>
+          <FormattedMessage id="common.action.edit" defaultMessage="Edit" />
         </a>,
         <Popconfirm
           title="Delete the task"
@@ -152,12 +135,9 @@ const Dept: React.FC = () => {
           key="delete"
         >
           <a>
-            <FormattedMessage
-              id="common.action.delete"
-              defaultMessage="Delete"
-            />
+            <FormattedMessage id="common.action.delete" defaultMessage="Delete" />
           </a>
-        </Popconfirm>
+        </Popconfirm>,
       ],
     },
   ];
@@ -182,10 +162,10 @@ const Dept: React.FC = () => {
               handleModalOpen(true);
             }}
           >
-            <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
-        request={menu}
+        request={menus}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -197,9 +177,9 @@ const Dept: React.FC = () => {
         <FooterToolbar
           extra={
             <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen"/>{' '}
-              <a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项"/>
+              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
+              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
               &nbsp;&nbsp;
               <span>
                 <FormattedMessage
@@ -207,7 +187,7 @@ const Dept: React.FC = () => {
                   defaultMessage="Total number of service calls"
                 />{' '}
                 {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)}{' '}
-                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万"/>
+                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万" />
               </span>
             </div>
           }

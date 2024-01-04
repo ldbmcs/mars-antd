@@ -58,19 +58,6 @@ export async function rule(
   });
 }
 
-export async function menu(
-  params: { current?: number; pageSize?: number },
-  options?: { [key: string]: any },
-) {
-  return request<API.MenuList>('/api/menu', {
-    method: 'GET',
-    params: {
-      ...params,
-    },
-    ...(options || {}),
-  });
-}
-
 export async function role(
   params: { current?: number; pageSize?: number },
   options?: { [key: string]: any },

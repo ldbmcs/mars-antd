@@ -1,8 +1,8 @@
-import { departmentsTree } from '@/services/ant-design-pro/department';
+import { menusTree } from '@/services/ant-design-pro/menu';
 import {
   ModalForm,
   ProForm,
-  ProFormSelect,
+  ProFormDigit,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
@@ -33,19 +33,20 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
   onSubmit,
   values,
 }) => {
-  const [treeData, setTreeData] = useState<DataNode[]>([]);
+  const [menus, setMenus] = useState<DataNode[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await departmentsTree();
-        setTreeData(response.data as DataNode[]);
+        const response = await menusTree();
+        setMenus(response.data as DataNode[]);
       } catch (error) {
         console.error('Error fetching tree data:', error);
       }
     };
     fetchData().then();
   }, []);
+
   return (
     <ModalForm
       title={title}
@@ -59,77 +60,29 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
           rules={[
             {
               required: true,
-              message: '昵称为必填项',
+              message: '名称为必填项',
             },
           ]}
           width="md"
-          name="nickname"
-          label={'昵称'}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '用户名为必填项',
-            },
-          ]}
-          width="md"
-          name="username"
-          label={'用户名'}
-        />
-      </ProForm.Group>
-      <ProForm.Group>
-        <ProFormSelect
-          name="positionId"
-          label="职位"
-          width={'md'}
-          request={async () => [
-            { label: '全部', value: 'all' },
-            { label: '未解决', value: 'open' },
-            { label: '已解决', value: 'closed' },
-            { label: '解决中', value: 'processing' },
-          ]}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '手机号为必填项',
-            },
-          ]}
-          width="md"
-          name="phone"
-          label={'手机号'}
-        />
-      </ProForm.Group>
-      <ProForm.Group>
-        <ProFormSelect
-          name="roleId"
-          label="角色"
-          width={'md'}
-          rules={[{ required: true, message: '请选择角色' }]}
-          request={async () => [
-            { label: '全部', value: 'all' },
-            { label: '未解决', value: 'open' },
-            { label: '已解决', value: 'closed' },
-            { label: '解决中', value: 'processing' },
-          ]}
+          name="name"
+          label={'菜单名称'}
         />
         <ProFormTreeSelect
-          name="departmentId"
-          label={'部门'}
+          name="parentId"
+          label={'上级菜单'}
           allowClear
           width={330}
           secondary
           rules={[
             {
               required: true,
-              message: '部门为必填项',
+              message: '上级菜单为必填项',
             },
           ]}
           request={async () => {
-            return treeData;
+            return menus;
           }}
+          // tree-select args
           fieldProps={{
             suffixIcon: null,
             filterTreeNode: true,
@@ -143,6 +96,20 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
               label: 'title',
             },
           }}
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormDigit
+          fieldProps={{ precision: 0 }}
+          rules={[
+            {
+              required: true,
+              message: '请输入排序',
+            },
+          ]}
+          width="md"
+          name="sort"
+          label={'排序'}
         />
       </ProForm.Group>
       <ProFormTextArea width="xl" name="remark" label={'备注'} />

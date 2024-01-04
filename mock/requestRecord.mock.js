@@ -9,19 +9,19 @@ module.exports = {
       title: '交互专家',
       group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
       tags: [
-        {key: '0', label: '很有想法的'},
-        {key: '1', label: '专注设计'},
-        {key: '2', label: '辣~'},
-        {key: '3', label: '大长腿'},
-        {key: '4', label: '川妹子'},
-        {key: '5', label: '海纳百川'},
+        { key: '0', label: '很有想法的' },
+        { key: '1', label: '专注设计' },
+        { key: '2', label: '辣~' },
+        { key: '3', label: '大长腿' },
+        { key: '4', label: '川妹子' },
+        { key: '5', label: '海纳百川' },
       ],
       notifyCount: 12,
       unreadCount: 11,
       country: 'China',
       geographic: {
-        province: {label: '浙江省', key: '330000'},
-        city: {label: '杭州市', key: '330100'},
+        province: { label: '浙江省', key: '330000' },
+        city: { label: '杭州市', key: '330100' },
       },
       address: '西湖区工专路 77 号',
       phone: '0752-268888888',
@@ -315,53 +315,11 @@ module.exports = {
     pageSize: 20,
     current: 1,
   },
-  'POST /api/login/outLogin': {data: {}, success: true},
+  'POST /api/login/outLogin': { data: {}, success: true },
   'POST /api/login/account': {
     status: 'ok',
     type: 'account',
     currentAuthority: 'admin',
-  },
-  'GET /api/menu': {
-    data: [
-      {
-        id: 1,
-        name: 'dashboard',
-        path: '/dashboard',
-        icon: 'dashboard',
-        index: 1,
-        enabled: 1,
-        createdAt: '2022-12-06T05:00:57.040Z',
-        children: [
-          {
-            id: 2,
-            name: '分析页',
-            path: '/dashboard/analysis',
-            icon: 'smile',
-            index: 1,
-            enabled: 1,
-            createdAt: '2022-12-06T05:00:57.040Z',
-          },
-          {
-            id: 3,
-            name: '监控页',
-            path: '/dashboard/monitor',
-            icon: 'smile',
-            index: 2,
-            enabled: 1,
-            createdAt: '2022-12-06T05:00:57.040Z',
-          }
-        ]
-      },
-      {
-        id: 4,
-        name: '表单页',
-        path: '/form',
-        icon: 'form',
-        index: 2,
-        enabled: 1,
-        createdAt: '2022-12-06T05:00:57.040Z',
-      }
-    ],
   },
   'GET /api/role': {
     data: [
@@ -379,7 +337,7 @@ module.exports = {
         enabled: 1,
         createdAt: '2022-12-06T05:00:57.040Z',
       },
-    ]
+    ],
   },
   'GET /api/user': {
     data: [
@@ -396,7 +354,7 @@ module.exports = {
         nickname: '普通用户',
         enabled: 1,
         createdAt: '2022-12-06T05:00:57.040Z',
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
