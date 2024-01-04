@@ -1,21 +1,24 @@
-import {GridContent, PageContainer} from "@ant-design/pro-components";
-import React from "react";
-import UsersTable from "./components/UsersTable";
-import DepartmentsTree from "./components/DepartmentsTree";
-import {Col, Row} from "antd";
+import { GridContent, PageContainer } from '@ant-design/pro-components';
+import { Col, Row } from 'antd';
+import React, { useState } from 'react';
+import DepartmentsTree from './components/DepartmentsTree';
+import UsersTable from './components/UsersTable';
 
 const Users: React.FC = () => {
-  return <PageContainer>
-    <GridContent>
-      <Row gutter={24}>
-        <Col xs={24} sm={24} md={12} lg={5}>
-          <DepartmentsTree/>
-        </Col>
-        <Col xs={24} sm={24} md={18} lg={19}>
-          <UsersTable/>
-        </Col>
-      </Row>
-    </GridContent>
-  </PageContainer>
-}
+  const [departmentId, setDepartmentId] = useState<string>('0');
+  return (
+    <PageContainer>
+      <GridContent>
+        <Row gutter={24}>
+          <Col xs={24} sm={24} md={12} lg={5}>
+            <DepartmentsTree onChange={setDepartmentId} />
+          </Col>
+          <Col xs={24} sm={24} md={18} lg={19}>
+            <UsersTable departmentId={departmentId} />
+          </Col>
+        </Row>
+      </GridContent>
+    </PageContainer>
+  );
+};
 export default Users;

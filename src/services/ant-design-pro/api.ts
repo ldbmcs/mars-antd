@@ -20,7 +20,6 @@ export async function outLogin(options?: { [key: string]: any }) {
   });
 }
 
-/** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
   return request<API.LoginResult>('/api/login/account', {
     method: 'POST',
@@ -32,7 +31,6 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
   });
 }
 
-/** 此处后端没有提供注释 GET /api/notices */
 export async function getNotices(options?: { [key: string]: any }) {
   return request<API.NoticeIconList>('/api/notices', {
     method: 'GET',
@@ -60,7 +58,10 @@ export async function rule(
   });
 }
 
-export async function menu(params: {current?:number;pageSize?:number}, options?: { [key: string]: any }) {
+export async function menu(
+  params: { current?: number; pageSize?: number },
+  options?: { [key: string]: any },
+) {
   return request<API.MenuList>('/api/menu', {
     method: 'GET',
     params: {
@@ -70,7 +71,10 @@ export async function menu(params: {current?:number;pageSize?:number}, options?:
   });
 }
 
-export async function role(params: {current?:number;pageSize?:number}, options?: { [key: string]: any }) {
+export async function role(
+  params: { current?: number; pageSize?: number },
+  options?: { [key: string]: any },
+) {
   return request<API.RoleList>('/api/role', {
     method: 'GET',
     params: {
@@ -80,7 +84,10 @@ export async function role(params: {current?:number;pageSize?:number}, options?:
   });
 }
 
-export async function user(params: {current?:number;pageSize?:number}, options?: { [key: string]: any }) {
+export async function user(
+  params: { current?: number; pageSize?: number; departmentId: string },
+  options?: { [key: string]: any },
+) {
   return request<API.UserList>('/api/user', {
     method: 'GET',
     params: {

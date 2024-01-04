@@ -1,15 +1,14 @@
-import {addRule, removeRule, updateRule, user} from '@/services/ant-design-pro/api';
-import {PlusOutlined} from '@ant-design/icons';
-import type {ActionType, ProColumns} from '@ant-design/pro-components';
-import {FooterToolbar, ModalForm, ProFormText, ProFormTextArea, ProTable,} from '@ant-design/pro-components';
-import {Button, message, Popconfirm} from 'antd';
-import React, {useRef, useState} from 'react';
-import {useIntl} from "@@/exports";
+import SaveOrUpdateUserForm from '@/pages/System/User/components/SaveOrUpdateUserForm';
+import { addRule, removeRule, updateRule, user } from '@/services/ant-design-pro/api';
+import { PlusOutlined } from '@ant-design/icons';
+import { ActionType, FooterToolbar, ProColumns, ProTable } from '@ant-design/pro-components';
+import { Button, message, Popconfirm, Switch } from 'antd';
+import React, { useRef, useState } from 'react';
 
 const handleAdd = async (fields: API.RuleListItem) => {
   const hide = message.loading('正在保存');
   try {
-    await addRule({...fields});
+    await addRule({ ...fields });
     hide();
     message.success('保存成功');
     return true;
@@ -68,37 +67,48 @@ const handleSingleDelete = async (e?: React.MouseEvent<HTMLElement>) => {
     hide();
     message.error('Delete failed, please try again');
   }
+};
+
+interface UsersTableProps {
+  departmentId: string;
 }
 
-const UsersTable: React.FC = () => {
-  const [createModalOpen, handleModalOpen] = useState<boolean>(false);
+const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps) => {
+  console.log(departmentId);
+  const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
-  const intl = useIntl();
-
   const columns: ProColumns<API.UserListItem>[] = [
     {
-      title: '用户名称',
+      title: '用户名',
       dataIndex: 'nickname',
       hideInSearch: false,
+      tooltip: '账号登录名',
+    },
+    {
+      title: '昵称',
+      dataIndex: 'username',
+      hideInSearch: false,
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+      hideInSearch: false,
+    },
+    {
+      title: '部门',
+      dataIndex: 'departmentName',
+      hideInSearch: true,
     },
     {
       title: '状态',
       dataIndex: 'enabled',
-      hideInForm: true,
-      valueEnum: {
-        0: {
-          text: '禁用',
-          status: 'Default',
-        },
-        1: {
-          text: '启用',
-          status: 'Processing',
-        },
-      },
+      valueType: 'switch',
+      hideInSearch: true,
+      render: (item, props) => <Switch checked={props.enabled === 1} />,
     },
     {
       title: '创建时间',
@@ -127,21 +137,16 @@ const UsersTable: React.FC = () => {
           cancelText="取消"
           key="delete"
         >
-          <a>
-            {'删除'}
-          </a>
-        </Popconfirm>
+          <a>{'删除'}</a>
+        </Popconfirm>,
       ],
     },
   ];
 
   return (
     <>
-      <ProTable<API.UserListItem, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.system.user.table.title',
-          defaultMessage: '用户列表',
-        })}
+      <ProTable<API.UserListItem, API.PageParams & { departmentId: string }>
+        headerTitle={'用户列表'}
         actionRef={actionRef}
         rowKey="id"
         toolBarRender={() => [
@@ -149,13 +154,14 @@ const UsersTable: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              handleModalOpen(true);
+              handleCreateModalOpen(true);
             }}
           >
-            <PlusOutlined/> {'新建'}
+            <PlusOutlined /> {'新建'}
           </Button>,
         ]}
         request={user}
+        params={{ departmentId }}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -168,7 +174,7 @@ const UsersTable: React.FC = () => {
           extra={
             <div>
               {'已选择 '}
-              <a style={{fontWeight: 600}}>{selectedRowsState.length}</a>
+              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>
               {' 项'}
             </div>
           }
@@ -184,43 +190,25 @@ const UsersTable: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title={'新建用户'}
-        width="400px"
+      <SaveOrUpdateUserForm
+        title={'新建'}
         open={createModalOpen}
-        onOpenChange={handleModalOpen}
-        onFinish={async (value) => {
+        onOpenChange={handleCreateModalOpen}
+        onSubmit={async (value) => {
           const success = await handleAdd(value as API.RuleListItem);
           if (success) {
-            handleModalOpen(false);
+            handleCreateModalOpen(false);
             if (actionRef.current) {
               actionRef.current.reload();
             }
           }
         }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '角色名称为必填项',
-            },
-          ]}
-          width="md"
-          name="name"
-        />
-        <ProFormTextArea width="md" name="desc"/>
-      </ModalForm>
-      <ModalForm
-        title={'编辑用户'}
-        width="400px"
+      />
+      <SaveOrUpdateUserForm
+        title={'编辑'}
         open={updateModalOpen}
-        onOpenChange={handleModalOpen}
-        // defaultValue={currentRow}
-        // onCancel={() => {
-        //   handleUpdateModalOpen(false);
-        // }}
-        onFinish={async (value) => {
+        onOpenChange={handleUpdateModalOpen}
+        onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {
             handleUpdateModalOpen(false);
@@ -230,19 +218,8 @@ const UsersTable: React.FC = () => {
             }
           }
         }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '角色名称为必填项',
-            },
-          ]}
-          width="md"
-          name="name"
-        />
-        <ProFormTextArea width="md" name="desc"/>
-      </ModalForm>
+        values={currentRow}
+      />
     </>
   );
 };
