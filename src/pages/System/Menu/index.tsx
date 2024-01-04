@@ -1,9 +1,8 @@
-import Icon from '@/components/UI/Icon';
 import SaveOrUpdateUserForm from '@/pages/System/Menu/components/CreateOrUpdateMenuFormModel';
 import { FormValueType } from '@/pages/TableList/components/UpdateForm';
 import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
 import { menus } from '@/services/ant-design-pro/menu';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, SmileOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Switch } from 'antd';
@@ -90,7 +89,7 @@ const Menu: React.FC = () => {
       dataIndex: 'icon',
       hideInForm: true,
       hideInSearch: true,
-      render: () => <Icon icon="SmileOutlined" />,
+      render: () => <SmileOutlined />,
     },
     {
       title: '排序',
