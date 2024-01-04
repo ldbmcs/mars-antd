@@ -26,7 +26,7 @@ export type UpdateFormProps = {
   values?: Partial<API.RuleListItem>;
 };
 
-const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
+const CreateOrUpdateUserFormModel: React.FC<UpdateFormProps> = ({
   title,
   open,
   onOpenChange,
@@ -150,4 +150,4 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
   );
 };
 
-export default SaveOrUpdateUserForm;
+export default CreateOrUpdateUserFormModel;

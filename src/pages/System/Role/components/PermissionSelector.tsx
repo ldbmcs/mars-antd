@@ -1,56 +1,26 @@
-import {Tree} from "antd";
-import {useState} from "react";
-import {DataNode} from "antd/es/tree";
-
-const treeData: DataNode[] = [
-  {
-    title: '0-0',
-    key: '0-0',
-    children: [
-      {
-        title: '0-0-0',
-        key: '0-0-0',
-        children: [
-          {title: '0-0-0-0', key: '0-0-0-0'},
-          {title: '0-0-0-1', key: '0-0-0-1'},
-          {title: '0-0-0-2', key: '0-0-0-2'},
-        ],
-      },
-      {
-        title: '0-0-1',
-        key: '0-0-1',
-        children: [
-          {title: '0-0-1-0', key: '0-0-1-0'},
-          {title: '0-0-1-1', key: '0-0-1-1'},
-          {title: '0-0-1-2', key: '0-0-1-2'},
-        ],
-      },
-      {
-        title: '0-0-2',
-        key: '0-0-2',
-      },
-    ],
-  },
-  {
-    title: '0-1',
-    key: '0-1',
-    children: [
-      {title: '0-1-0-0', key: '0-1-0-0'},
-      {title: '0-1-0-1', key: '0-1-0-1'},
-      {title: '0-1-0-2', key: '0-1-0-2'},
-    ],
-  },
-  {
-    title: '0-2',
-    key: '0-2',
-  },
-];
+import { menusTree } from '@/services/ant-design-pro/menu';
+import { Tree } from 'antd';
+import { DataNode } from 'antd/es/tree';
+import { useEffect, useState } from 'react';
 
 const PermissionSelector = () => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>(['0-0-0', '0-0-1']);
   // const [checkedKeys, setCheckedKeys] = useState<React.Key[]>(['0-0-0']);
   const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
+  const [menus, setMenus] = useState<DataNode[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await menusTree();
+        setMenus(response.data as DataNode[]);
+      } catch (error) {
+        console.error('Error fetching tree data:', error);
+      }
+    };
+    fetchData().then();
+  }, []);
 
   const onExpand = (expandedKeysValue: React.Key[]) => {
     console.log('onExpand', expandedKeysValue);
@@ -60,12 +30,9 @@ const PermissionSelector = () => {
     setAutoExpandParent(false);
   };
 
-  const onCheck = () => {
+  const onCheck = () => {};
 
-  };
-
-  const onSelect = (selectedKeysValue: React.Key[], info: any) => {
-    console.log('onSelect', info);
+  const onSelect = (selectedKeysValue: React.Key[]) => {
     setSelectedKeys(selectedKeysValue);
   };
 
@@ -79,9 +46,9 @@ const PermissionSelector = () => {
       // checkedKeys={checkedKeys}
       onSelect={onSelect}
       selectedKeys={selectedKeys}
-      treeData={treeData}
+      treeData={menus}
     />
   );
-}
+};
 
 export default PermissionSelector;

@@ -1,4 +1,4 @@
-import SaveOrUpdateUserForm from '@/pages/System/User/components/SaveOrUpdateUserForm';
+import CreateOrUpdateUserFormModel from '@/pages/System/User/components/CreateOrUpdateUserFormModel';
 import { addRule, removeRule, updateRule, user } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import { ActionType, FooterToolbar, ProColumns, ProTable } from '@ant-design/pro-components';
@@ -190,7 +190,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
           </Button>
         </FooterToolbar>
       )}
-      <SaveOrUpdateUserForm
+      <CreateOrUpdateUserFormModel
         title={'新建'}
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
@@ -204,7 +204,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
           }
         }}
       />
-      <SaveOrUpdateUserForm
+      <CreateOrUpdateUserFormModel
         title={'编辑'}
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}

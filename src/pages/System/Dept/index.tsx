@@ -5,8 +5,8 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Switch } from 'antd';
 import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/SaveOrUpdateDepartment';
-import SaveOrUpdateDepartment from './components/SaveOrUpdateDepartment';
+import type { FormValueType } from './components/CreateOrUpdateDepartmentFormModel';
+import SaveOrUpdateDepartment from './components/CreateOrUpdateDepartmentFormModel';
 
 const handleAdd = async (fields: API.RuleListItem) => {
   const hide = message.loading('正在添加');
@@ -81,7 +81,7 @@ const Dept: React.FC = () => {
 
   const columns: ProColumns<API.MenuListItem>[] = [
     {
-      title: '名称',
+      title: '部门名称',
       dataIndex: 'name',
     },
     {
@@ -118,11 +118,10 @@ const Dept: React.FC = () => {
           {'编辑'}
         </a>,
         <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
+          title="是否要删除这个部门?"
           onConfirm={handleSingleDelete}
-          okText="Yes"
-          cancelText="No"
+          okText="确认"
+          cancelText="取消"
           key="delete"
         >
           <a>{'删除'}</a>

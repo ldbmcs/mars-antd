@@ -143,6 +143,7 @@ export default {
         parentId: '0',
         sort: 1,
         enabled: 0,
+        createdAt: '2022-12-06T05:00:57.040Z',
         children: [
           {
             id: '1-1',
@@ -150,6 +151,7 @@ export default {
             parentId: '1',
             sort: 1,
             enabled: 1,
+            createdAt: '2022-12-06T05:00:57.040Z',
             children: [
               {
                 id: '1-1-1',
@@ -157,6 +159,7 @@ export default {
                 parentId: '1-1',
                 sort: 1,
                 enabled: 1,
+                createdAt: '2022-12-06T05:00:57.040Z',
               },
             ],
           },
@@ -166,15 +169,7 @@ export default {
             parentId: '1',
             sort: 2,
             enabled: 1,
-            children: [
-              {
-                id: '1-2-1',
-                name: '助理',
-                parentId: '1-2',
-                sort: 1,
-                enabled: 1,
-              },
-            ],
+            createdAt: '2022-12-06T05:00:57.040Z',
           },
         ],
       },
@@ -184,6 +179,7 @@ export default {
         parentId: '0',
         sort: 2,
         enabled: 1,
+        createdAt: '2022-12-06T05:00:57.040Z',
         children: [
           {
             id: '2-1',
@@ -191,15 +187,7 @@ export default {
             parentId: '2',
             sort: 1,
             enabled: 1,
-            children: [
-              {
-                id: '2-1-1',
-                name: '助理',
-                parentId: '2-1',
-                sort: 1,
-                enabled: 1,
-              },
-            ],
+            createdAt: '2022-12-06T05:00:57.040Z',
           },
           {
             id: '2-2',
@@ -207,15 +195,7 @@ export default {
             parentId: '2',
             sort: 2,
             enabled: 1,
-            children: [
-              {
-                id: '2-2-1',
-                name: '助理',
-                parentId: '2-2',
-                sort: 1,
-                enabled: 1,
-              },
-            ],
+            createdAt: '2022-12-06T05:00:57.040Z',
           },
         ],
       },
@@ -225,6 +205,7 @@ export default {
         parentId: '0',
         sort: 3,
         enabled: 1,
+        createdAt: '2022-12-06T05:00:57.040Z',
         children: [
           {
             id: '3-1',
@@ -232,15 +213,7 @@ export default {
             parentId: '3',
             sort: 1,
             enabled: 1,
-            children: [
-              {
-                id: '3-1-1',
-                name: '助理',
-                parentId: '3-1',
-                sort: 1,
-                enabled: 1,
-              },
-            ],
+            createdAt: '2022-12-06T05:00:57.040Z',
           },
           {
             id: '3-2',
@@ -248,15 +221,7 @@ export default {
             parentId: '3',
             sort: 2,
             enabled: 1,
-            children: [
-              {
-                id: '3-2-1',
-                name: '助理',
-                parentId: '3-2',
-                sort: 1,
-                enabled: 1,
-              },
-            ],
+            createdAt: '2022-12-06T05:00:57.040Z',
           },
         ],
       },
@@ -266,6 +231,7 @@ export default {
         parentId: '0',
         sort: 4,
         enabled: 1,
+        createdAt: '2022-12-06T05:00:57.040Z',
       },
     ],
   },

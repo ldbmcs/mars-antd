@@ -1,11 +1,5 @@
 import { menusTree } from '@/services/ant-design-pro/menu';
-import {
-  ModalForm,
-  ProForm,
-  ProFormDigit,
-  ProFormText,
-  ProFormTextArea,
-} from '@ant-design/pro-components';
+import { ModalForm, ProForm, ProFormDigit, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
 import { DataNode } from 'antd/es/tree';
 import React, { useEffect, useState } from 'react';
@@ -82,7 +76,6 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
           request={async () => {
             return menus;
           }}
-          // tree-select args
           fieldProps={{
             suffixIcon: null,
             filterTreeNode: true,
@@ -99,20 +92,41 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
         />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormDigit
-          fieldProps={{ precision: 0 }}
+        <ProFormText
           rules={[
             {
               required: true,
-              message: '请输入排序',
+              message: '请输入路由',
             },
           ]}
           width="md"
-          name="sort"
-          label={'排序'}
+          name="path"
+          label={'路由'}
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              message: '请输入组件',
+            },
+          ]}
+          width="md"
+          name="component"
+          label={'组件'}
         />
       </ProForm.Group>
-      <ProFormTextArea width="xl" name="remark" label={'备注'} />
+      <ProFormDigit
+        fieldProps={{ precision: 0 }}
+        rules={[
+          {
+            required: true,
+            message: '请输入排序',
+          },
+        ]}
+        width="md"
+        name="sort"
+        label={'排序'}
+      />
     </ModalForm>
   );
 };

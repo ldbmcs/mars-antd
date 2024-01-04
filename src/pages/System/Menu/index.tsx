@@ -1,5 +1,5 @@
 import Icon from '@/components/UI/Icon';
-import SaveOrUpdateUserForm from '@/pages/System/Menu/components/SaveOrUpdateMenuForm';
+import SaveOrUpdateUserForm from '@/pages/System/Menu/components/CreateOrUpdateMenuFormModel';
 import { FormValueType } from '@/pages/TableList/components/UpdateForm';
 import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
 import { menus } from '@/services/ant-design-pro/menu';
@@ -82,7 +82,7 @@ const Menu: React.FC = () => {
 
   const columns: ProColumns<API.MenuListItem>[] = [
     {
-      title: '名称',
+      title: '菜单名称',
       dataIndex: 'name',
     },
     {
@@ -97,6 +97,10 @@ const Menu: React.FC = () => {
       dataIndex: 'sort',
       hideInForm: true,
       hideInSearch: true,
+    },
+    {
+      title: '路由',
+      dataIndex: 'path',
     },
     {
       title: '状态',
@@ -128,8 +132,8 @@ const Menu: React.FC = () => {
         <Popconfirm
           title="是否要删除这个菜单?"
           onConfirm={handleSingleDelete}
-          okText="Yes"
-          cancelText="No"
+          okText="确认"
+          cancelText="取消"
           key="delete"
         >
           <a>{'删除'}</a>
