@@ -17,27 +17,10 @@ export default [
     component: './Login',
   },
   {
-    path: '/welcome',
-    name: 'welcome',
-    icon: 'smile',
-    component: './Welcome',
-  },
-  {
     path: '/dashboard',
-    name: 'dashboard',
+    name: '概览',
     icon: 'dashboard',
-    routes: [
-      {
-        path: '/dashboard/analysis',
-        name: 'analysis',
-        component: './Dashboard/Analysis',
-      },
-      {
-        path: '/dashboard/monitor',
-        name: 'monitor',
-        component: './Dashboard/Monitor',
-      },
-    ],
+    component: './Dashboard',
   },
   {
     name: 'system',
@@ -83,7 +66,7 @@ export default [
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/dashboard',
   },
   {
     path: '*',
