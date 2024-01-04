@@ -1,13 +1,26 @@
-import { removeRule, updateRule } from '@/services/ant-design-pro/api';
-import { menus } from '@/services/ant-design-pro/menu';
+import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
+import { departments } from '@/services/ant-design-pro/department';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message, Popconfirm, Switch } from 'antd';
 import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
+import type { FormValueType } from './components/SaveOrUpdateDepartment';
+import SaveOrUpdateDepartment from './components/SaveOrUpdateDepartment';
+
+const handleAdd = async (fields: API.RuleListItem) => {
+  const hide = message.loading('正在添加');
+  try {
+    await addRule({ ...fields });
+    hide();
+    message.success('Added successfully');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('Adding failed, please try again!');
+    return false;
+  }
+};
 
 const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('Configuring');
@@ -60,71 +73,49 @@ const handleSingleDelete = async (e?: React.MouseEvent<HTMLElement>) => {
 };
 
 const Dept: React.FC = () => {
-  const [modalOpen, handleModalOpen] = useState<boolean>(false);
+  const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
+  const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
-  const intl = useIntl();
-
   const columns: ProColumns<API.MenuListItem>[] = [
     {
-      title: <FormattedMessage id="pages.system.dept.column.name" defaultMessage="名称" />,
+      title: '名称',
       dataIndex: 'name',
     },
     {
-      title: <FormattedMessage id="pages.system.dept.column.code" defaultMessage="编码" />,
-      dataIndex: 'code',
-    },
-    {
-      title: <FormattedMessage id="pages.system.dept.column.index" defaultMessage="排序" />,
-      dataIndex: 'index',
+      title: '排序',
+      dataIndex: 'sort',
       hideInForm: true,
       hideInSearch: true,
     },
     {
-      title: <FormattedMessage id="pages.system.dept.column.enabled" defaultMessage="状态" />,
+      title: '状态',
       dataIndex: 'enabled',
-      hideInForm: true,
-      valueEnum: {
-        0: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
-            />
-          ),
-          status: 'Default',
-        },
-        1: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
-          ),
-          status: 'Processing',
-        },
-      },
+      valueType: 'switch',
+      hideInSearch: true,
+      render: (item, props) => <Switch checked={props.enabled === 1} />,
     },
     {
-      title: (
-        <FormattedMessage id="pages.system.menu.column.createdAt" defaultMessage="Created time" />
-      ),
+      title: '创建时间',
       sorter: true,
       dataIndex: 'createdAt',
       valueType: 'dateTime',
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
+      title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
         <a
           key="edit"
           onClick={() => {
-            handleModalOpen(true);
+            handleUpdateModalOpen(true);
             setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="common.action.edit" defaultMessage="Edit" />
+          {'编辑'}
         </a>,
         <Popconfirm
           title="Delete the task"
@@ -134,9 +125,7 @@ const Dept: React.FC = () => {
           cancelText="No"
           key="delete"
         >
-          <a>
-            <FormattedMessage id="common.action.delete" defaultMessage="Delete" />
-          </a>
+          <a>{'删除'}</a>
         </Popconfirm>,
       ],
     },
@@ -145,10 +134,7 @@ const Dept: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.MenuListItem, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.system.dept.table.title',
-          defaultMessage: '部门列表',
-        })}
+        headerTitle={'部门列表'}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -159,13 +145,13 @@ const Dept: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              handleModalOpen(true);
+              handleCreateModalOpen(true);
             }}
           >
-            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+            <PlusOutlined /> {'新建'}
           </Button>,
         ]}
-        request={menus}
+        request={departments}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -177,18 +163,9 @@ const Dept: React.FC = () => {
         <FooterToolbar
           extra={
             <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
-              &nbsp;&nbsp;
-              <span>
-                <FormattedMessage
-                  id="pages.searchTable.totalServiceCalls"
-                  defaultMessage="Total number of service calls"
-                />{' '}
-                {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)}{' '}
-                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万" />
-              </span>
+              {'已选择 '}
+              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>
+              {' 项'}
             </div>
           }
         >
@@ -199,29 +176,39 @@ const Dept: React.FC = () => {
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            <FormattedMessage
-              id="pages.searchTable.batchDeletion"
-              defaultMessage="Batch deletion"
-            />
+            {'批量删除'}
           </Button>
         </FooterToolbar>
       )}
-      <UpdateForm
+      <SaveOrUpdateDepartment
+        title={'新建'}
+        open={createModalOpen}
+        onOpenChange={handleCreateModalOpen}
+        onSubmit={async (value) => {
+          const success = await handleAdd(value as API.RuleListItem);
+          if (success) {
+            handleCreateModalOpen(false);
+            if (actionRef.current) {
+              actionRef.current.reload();
+            }
+          }
+        }}
+      />
+      <SaveOrUpdateDepartment
+        title={'编辑'}
+        open={updateModalOpen}
+        onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {
-            handleModalOpen(false);
+            handleUpdateModalOpen(false);
             setCurrentRow(undefined);
             if (actionRef.current) {
               actionRef.current.reload();
             }
           }
         }}
-        onCancel={() => {
-          handleModalOpen(false);
-        }}
-        updateModalOpen={modalOpen}
-        values={currentRow || {}}
+        values={currentRow}
       />
     </PageContainer>
   );

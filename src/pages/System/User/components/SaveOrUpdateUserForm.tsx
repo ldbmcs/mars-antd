@@ -138,9 +138,9 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
             labelInValue: true,
             autoClearSearchValue: true,
             multiple: true,
-            treeNodeFilterProp: 'title',
+            treeNodeFilterProp: 'name',
             fieldNames: {
-              label: 'title',
+              label: 'name',
             },
           }}
         />

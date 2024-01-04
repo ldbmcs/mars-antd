@@ -33,6 +33,7 @@ const DepartmentsTree: React.FC<DepartmentsTreeProps> = ({ onChange }: Departmen
       switcherIcon={<DownOutlined />}
       onSelect={onSelect}
       treeData={treeData}
+      fieldNames={{ key: 'id', title: 'name' }}
       style={{ marginLeft: '12px', marginRight: '12px', padding: '24px 12px' }}
     />
   );
