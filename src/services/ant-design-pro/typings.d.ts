@@ -3,30 +3,22 @@
 
 declare namespace API {
   type CurrentUser = {
-    name?: string;
-    avatar?: string;
-    userid?: string;
-    email?: string;
-    signature?: string;
-    title?: string;
-    group?: string;
-    tags?: { key?: string; label?: string }[];
-    notifyCount?: number;
-    unreadCount?: number;
-    country?: string;
-    access?: string;
-    geographic?: {
-      province?: { label?: string; key?: string };
-      city?: { label?: string; key?: string };
-    };
-    address?: string;
-    phone?: string;
+    id?: string;
+    username?: string;
+    nickname?: string;
+    mobile?: string;
+    departmentId?: string;
+  };
+
+  type Token = {
+    tokenName: string;
+    tokenValue: string;
   };
 
   type LoginResult = {
-    status?: string;
-    type?: string;
-    currentAuthority?: string;
+    code?: number;
+    msg?: string;
+    data?: API.Token;
   };
 
   type PageParams = {
@@ -62,10 +54,9 @@ declare namespace API {
   };
 
   type LoginParams = {
-    username?: string;
-    password?: string;
+    principal?: string;
+    credential?: string;
     autoLogin?: boolean;
-    type?: string;
   };
 
   type ErrorResponse = {
@@ -107,7 +98,7 @@ declare namespace API {
     index?: number;
     enabled?: number;
     createdAt?: string;
-  }
+  };
 
   type MenuList = {
     data?: MenuListItem[];
@@ -115,21 +106,19 @@ declare namespace API {
     success?: boolean;
   };
 
-
   type RoleListItem = {
     id?: string;
     name?: string;
     code?: string;
     enabled?: number;
     createdAt?: string;
-  }
+  };
 
   type RoleList = {
     data?: RoleListItem[];
     total?: number;
     success?: boolean;
-  }
-
+  };
 
   type UserListItem = {
     id?: string;
@@ -137,11 +126,11 @@ declare namespace API {
     nickname?: string;
     enabled?: number;
     createdAt?: string;
-  }
+  };
 
   type UserList = {
     data?: UserListItem[];
     total?: number;
     success?: boolean;
-  }
+  };
 }
