@@ -47,21 +47,6 @@ export default [
         path: '/system/dept',
         component: './System/Dept',
       },
-      {
-        name: 'dict',
-        path: '/system/dict',
-        component: './System/Dict',
-      },
-      {
-        name: 'param',
-        path: '/system/param',
-        component: './System/Param',
-      },
-      {
-        name: 'log',
-        path: '/system/log',
-        component: './System/Log',
-      },
     ],
   },
   {
