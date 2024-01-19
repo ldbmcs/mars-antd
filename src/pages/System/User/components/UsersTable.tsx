@@ -74,7 +74,6 @@ interface UsersTableProps {
 }
 
 const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps) => {
-  console.log(departmentId);
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();

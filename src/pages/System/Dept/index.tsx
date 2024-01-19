@@ -1,5 +1,11 @@
-import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
-import { departments } from '@/services/ant-design-pro/department';
+import {
+  addDepartment,
+  departments,
+  disableDepartment,
+  enableDepartment,
+  removeDepartments,
+  updateDepartment,
+} from '@/services/ant-design-pro/department';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
@@ -8,78 +14,52 @@ import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/CreateOrUpdateDepartmentFormModel';
 import SaveOrUpdateDepartment from './components/CreateOrUpdateDepartmentFormModel';
 
-const handleAdd = async (fields: API.RuleListItem) => {
-  const hide = message.loading('正在添加');
+const handleAdd = async (fields: FormValueType) => {
   try {
-    await addRule({ ...fields });
-    hide();
-    message.success('Added successfully');
+    await addDepartment({ ...fields });
+    message.success('添加成功');
     return true;
   } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
+    message.error('添加失败，请重试！');
     return false;
   }
 };
 
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
-  }
+const handleUpdate = async (id: string | undefined, fields: FormValueType) => {
+  await updateDepartment(id!, { ...fields });
+  message.success('操作成功');
+  return true;
 };
 
-const handleDelete = async (selectedRows: API.RuleListItem[]) => {
-  const hide = message.loading('正在删除');
+const handleDelete = async (selectedRows: API.DepartmentListItem[]) => {
   if (!selectedRows) return true;
-  try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
-    return false;
-  }
+  await removeDepartments(selectedRows.map((row) => row.id).join(','));
+  message.success('操作成功');
+  return true;
 };
 
-const handleSingleDelete = async (e?: React.MouseEvent<HTMLElement>) => {
-  const hide = message.loading('正在删除');
-  try {
-    await removeRule({
-      key: e?.currentTarget.getAttribute('key'),
-    });
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-  } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
-  }
+const handleSingleDelete = async (id: string | undefined, current: ActionType | undefined) => {
+  await removeDepartments(id!);
+  current?.reload();
+  message.success('操作成功');
 };
 
 const Dept: React.FC = () => {
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.DepartmentListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.DepartmentListItem[]>([]);
 
-  const columns: ProColumns<API.MenuListItem>[] = [
+  function handleStatusChange(id: string, check: boolean) {
+    if (check) {
+      enableDepartment(id).then(() => actionRef.current?.reload());
+    } else {
+      disableDepartment(id).then(() => actionRef.current?.reload());
+    }
+  }
+
+  const columns: ProColumns<API.DepartmentListItem>[] = [
     {
       title: '部门名称',
       dataIndex: 'name',
@@ -93,9 +73,15 @@ const Dept: React.FC = () => {
     {
       title: '状态',
       dataIndex: 'enabled',
-      valueType: 'switch',
       hideInSearch: true,
-      render: (item, props) => <Switch checked={props.enabled === 1} />,
+      render: (item, props) => (
+        <Switch
+          checked={props.enabled}
+          onChange={(checked) => {
+            handleStatusChange(props.id!, checked);
+          }}
+        />
+      ),
     },
     {
       title: '创建时间',
@@ -119,7 +105,7 @@ const Dept: React.FC = () => {
         </a>,
         <Popconfirm
           title="是否要删除这个部门?"
-          onConfirm={handleSingleDelete}
+          onConfirm={() => handleSingleDelete(record.id, actionRef.current)}
           okText="确认"
           cancelText="取消"
           key="delete"
@@ -132,8 +118,9 @@ const Dept: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.MenuListItem, API.PageParams>
+      <ProTable<API.DepartmentListItem>
         headerTitle={'部门列表'}
+        pagination={false}
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -184,12 +171,10 @@ const Dept: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
+          const success = await handleAdd(value);
           if (success) {
             handleCreateModalOpen(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
+            actionRef.current?.reload();
           }
         }}
       />
@@ -198,13 +183,11 @@ const Dept: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(value);
+          const success = await handleUpdate(currentRow?.id, value);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
+            actionRef.current?.reload();
           }
         }}
         values={currentRow}

@@ -73,7 +73,7 @@ export async function user(
   params: { current?: number; pageSize?: number; departmentId: string },
   options?: { [key: string]: any },
 ) {
-  return request<API.UserList>('/api/user', {
+  return request<API.UserList>('/api/system/users', {
     method: 'GET',
     params: {
       ...params,

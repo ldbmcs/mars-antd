@@ -10,14 +10,14 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.RuleListItem>;
+} & Partial<API.DepartmentListItem>;
 
 export type UpdateFormProps = {
   title: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
-  values?: Partial<API.RuleListItem>;
+  values?: Partial<API.DepartmentListItem>;
 };
 
 const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
@@ -29,11 +29,22 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
 }) => {
   const [departments, setDepartments] = useState<DataNode[]>([]);
 
+  function formatTreeList(list: API.DepartmentListItem[]) {
+    list.map((item) => {
+      item.key = item.id;
+      if (item['children']) {
+        item.children = formatTreeList(item.children);
+      }
+      return item;
+    });
+    return list;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await departmentsTree();
-        setDepartments(response.data as DataNode[]);
+        setDepartments(formatTreeList(response.data ?? []) as DataNode[]);
       } catch (error) {
         console.error('Error fetching tree data:', error);
       }
@@ -58,7 +69,7 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
           },
         ]}
         width="md"
-        name="title"
+        name="name"
         label={'部门名称'}
       />
       <ProFormTreeSelect
@@ -67,12 +78,6 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
         allowClear
         width={330}
         secondary
-        rules={[
-          {
-            required: true,
-            message: '请选择上级部门',
-          },
-        ]}
         request={async () => {
           return departments;
         }}
@@ -81,13 +86,13 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
           filterTreeNode: true,
           showSearch: true,
           popupMatchSelectWidth: false,
-          labelInValue: true,
+          labelInValue: false,
           autoClearSearchValue: true,
-          multiple: true,
           treeNodeFilterProp: 'name',
           treeDefaultExpandAll: true,
           fieldNames: {
             label: 'name',
+            value: 'id',
           },
         }}
       />
