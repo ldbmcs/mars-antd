@@ -10,23 +10,15 @@ import {
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
 import React from 'react';
 
-export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
-} & Partial<API.SysMenuVO>;
-
 export type UpdateFormProps = {
   title: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: FormValueType) => Promise<void>;
+  onSubmit: (values: API.MenuDTO) => Promise<void>;
   values?: Partial<API.SysMenuVO>;
 };
 
-const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
+const MenuFormModel: React.FC<UpdateFormProps> = ({
   title,
   open,
   onOpenChange,
@@ -114,4 +106,4 @@ const SaveOrUpdateUserForm: React.FC<UpdateFormProps> = ({
   );
 };
 
-export default SaveOrUpdateUserForm;
+export default MenuFormModel;

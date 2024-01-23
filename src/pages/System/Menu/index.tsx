@@ -1,5 +1,5 @@
 import { useCrudOperations } from '@/hooks/useCrudOperations';
-import SaveOrUpdateUserForm from '@/pages/System/Menu/components/MenuFormModel';
+import MenuFormModel from '@/pages/System/Menu/components/MenuFormModel';
 import { menuTableColumns } from '@/pages/System/Menu/components/MenuTableColumns';
 import {
   deleteMenusUsingDelete,
@@ -90,11 +90,11 @@ const Menu: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <SaveOrUpdateUserForm
+      <MenuFormModel
         title={'新建'}
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
-        onSubmit={async (value) => {
+        onSubmit={async (value: API.MenuDTO) => {
           const success = await handleAdd(value as API.MenuDTO);
           if (success) {
             handleCreateModalOpen(false);
@@ -104,7 +104,7 @@ const Menu: React.FC = () => {
           }
         }}
       />
-      <SaveOrUpdateUserForm
+      <MenuFormModel
         title={'编辑'}
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
