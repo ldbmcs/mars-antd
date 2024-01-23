@@ -1,14 +1,6 @@
-import {QuestionCircleOutlined} from '@ant-design/icons';
-import {SelectLang as UmiSelectLang} from '@umijs/max';
-import React from 'react';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 export type SiderTheme = 'light' | 'dark';
-
-export const SelectLang = () => {
-  return (
-    <UmiSelectLang/>
-  );
-};
 
 export const Question = () => {
   return (
@@ -21,7 +13,7 @@ export const Question = () => {
         window.open('https://pro.ant.design/docs/getting-started');
       }}
     >
-      <QuestionCircleOutlined/>
+      <QuestionCircleOutlined />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { ProColumns } from '@ant-design/pro-components';
 import { Popconfirm, Switch, Tag } from 'antd';
 
 interface MenuTableColumnsProps {
-  handleEdit: (record: API.MenuListItem) => void;
+  handleEdit: (record: API.SysMenuVO) => void;
   handleDelete: (id: string) => void;
   handleStatusChange: (id: string, checked: boolean) => void;
 }
@@ -27,7 +27,7 @@ export const menuTableColumns = ({
   handleEdit,
   handleDelete,
   handleStatusChange,
-}: MenuTableColumnsProps): ProColumns<API.MenuListItem>[] => [
+}: MenuTableColumnsProps): ProColumns<API.SysMenuVO>[] => [
   {
     title: '菜单名称',
     dataIndex: 'name',

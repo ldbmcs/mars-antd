@@ -1,4 +1,4 @@
-import { departmentsTree } from '@/services/ant-design-pro/department';
+import { listDepartmentsUsingGet } from '@/services/ant-design-pro/sysDepartmentController';
 import { DownOutlined } from '@ant-design/icons';
 import { Tree, TreeProps } from 'antd';
 import { DataNode } from 'antd/es/tree';
@@ -14,7 +14,7 @@ const DepartmentsTree: React.FC<DepartmentsTreeProps> = ({ onChange }: Departmen
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await departmentsTree();
+        const response = await listDepartmentsUsingGet();
         setTreeData(response.data as DataNode[]);
       } catch (error) {
         console.error('Error fetching tree data:', error);

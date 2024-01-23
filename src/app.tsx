@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import { Question, SelectLang } from '@/components/RightContent';
+import { Question } from '@/components/RightContent';
 import { RequestConfig } from '@@/plugin-request/request';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
@@ -8,7 +8,7 @@ import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
-import { currentUser as queryCurrentUser } from './services/ant-design-pro/auth';
+import { currentUserUsingGet } from './services/ant-design-pro/authController';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/login';
@@ -18,13 +18,13 @@ const loginPath = '/login';
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
+  currentUser?: API.SysUser;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: () => Promise<API.SysUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser({
+      const msg = await currentUserUsingGet({
         skipErrorHandler: true,
       });
       return msg.data;
@@ -51,7 +51,7 @@ export async function getInitialState(): Promise<{
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
+    actionsRender: () => [<Question key="doc" />],
     avatarProps: {
       src: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
       title: <AvatarName />,

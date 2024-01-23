@@ -2,13 +2,13 @@ import { useCrudOperations } from '@/hooks/useCrudOperations';
 import SaveOrUpdateUserForm from '@/pages/System/Menu/components/MenuFormModel';
 import { menuTableColumns } from '@/pages/System/Menu/components/MenuTableColumns';
 import {
-  addMenu,
-  disableMenu,
-  enableMenu,
-  menus,
-  removeMenus,
-  updateMenu,
-} from '@/services/ant-design-pro/menu';
+  deleteMenuUsingDelete,
+  disableMenuUsingPost,
+  enableMenuUsingPost,
+  listMenusUsingGet,
+  saveMenuUsingPost,
+  updateMenuUsingPost,
+} from '@/services/ant-design-pro/sysMenuController';
 import { PlusOutlined } from '@ant-design/icons';
 import { ActionType, FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
@@ -18,15 +18,15 @@ const Menu: React.FC = () => {
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.MenuListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.MenuListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.SysMenuVO>();
+  const [selectedRowsState, setSelectedRows] = useState<API.SysMenuVO[]>([]);
 
   const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
-    addMenu,
-    updateMenu,
-    removeMenus,
-    enableMenu,
-    disableMenu,
+    saveMenuUsingPost,
+    updateMenuUsingPost,
+    deleteMenuUsingDelete,
+    enableMenuUsingPost,
+    disableMenuUsingPost,
   );
 
   function handleStatusChange(id: string, check: boolean) {
@@ -39,7 +39,7 @@ const Menu: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.MenuListItem, API.PageParams>
+      <ProTable<API.SysMenuVO>
         headerTitle={'菜单列表'}
         actionRef={actionRef}
         rowKey="id"
@@ -57,9 +57,9 @@ const Menu: React.FC = () => {
             <PlusOutlined /> {'新建'}
           </Button>,
         ]}
-        request={menus}
+        request={listMenusUsingGet}
         columns={menuTableColumns({
-          handleEdit: (record: API.MenuListItem) => {
+          handleEdit: (record: API.SysMenuVO) => {
             handleUpdateModalOpen(true);
             setCurrentRow(record);
           },
@@ -103,7 +103,7 @@ const Menu: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value);
+          const success = await handleAdd(value as API.AddMenuDTO);
           if (success) {
             handleCreateModalOpen(false);
             if (actionRef.current) {
@@ -117,7 +117,7 @@ const Menu: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value);
+          const success = await handleUpdate(currentRow?.id, value as API.UpdateMenuDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

@@ -1,4 +1,4 @@
-import { departmentsTree } from '@/services/ant-design-pro/department';
+import { listDepartmentsUsingGet } from '@/services/ant-design-pro/sysDepartmentController';
 import { ModalForm, ProFormDigit, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
 import { DataNode } from 'antd/es/tree';
@@ -10,14 +10,14 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.DepartmentListItem>;
+} & Partial<API.SysDepartmentVO>;
 
 export type UpdateFormProps = {
   title: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
-  values?: Partial<API.DepartmentListItem>;
+  values?: Partial<API.SysDepartmentVO>;
 };
 
 const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
@@ -29,9 +29,8 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
 }) => {
   const [departments, setDepartments] = useState<DataNode[]>([]);
 
-  function formatTreeList(list: API.DepartmentListItem[]) {
+  function formatTreeList(list: API.SysDepartmentVO[]) {
     list.map((item) => {
-      item.key = item.id;
       if (item['children']) {
         item.children = formatTreeList(item.children);
       }
@@ -43,7 +42,7 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await departmentsTree();
+        const response = await listDepartmentsUsingGet();
         setDepartments(formatTreeList(response.data ?? []) as DataNode[]);
       } catch (error) {
         console.error('Error fetching tree data:', error);

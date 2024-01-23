@@ -23,27 +23,27 @@ export default [
     component: './Dashboard',
   },
   {
-    name: 'system',
+    name: '系统管理',
     icon: 'setting',
     path: '/system',
     routes: [
       {
-        name: 'user',
+        name: '用户管理',
         path: '/system/user',
         component: './System/User',
       },
       {
-        name: 'menu',
+        name: '菜单管理',
         path: '/system/menu',
         component: './System/Menu',
       },
       {
-        name: 'role',
+        name: '角色管理',
         path: '/system/role',
         component: './System/Role',
       },
       {
-        name: 'dept',
+        name: '部门管理',
         path: '/system/dept',
         component: './System/Dept',
       },

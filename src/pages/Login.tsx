@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/auth';
+import { signInUsingPost } from '@/services/ant-design-pro/authController';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
@@ -35,11 +35,11 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (values: API.LoginParams) => {
-    const result = await login({ ...values });
+  const handleSubmit = async (values: API.SignInUserDTO) => {
+    const result = await signInUsingPost({ ...values });
     if (result.code === 200) {
       message.success('登录成功！');
-      localStorage.setItem('token', result.data!.tokenValue);
+      localStorage.setItem('token', result.data!.tokenValue ?? '');
       await fetchUserInfo();
       const urlParams = new URL(window.location.href).searchParams;
       history.push(urlParams.get('redirect') || '/');
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
             autoLogin: true,
           }}
           onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
+            await handleSubmit(values as API.SignInUserDTO);
           }}
         >
           <>

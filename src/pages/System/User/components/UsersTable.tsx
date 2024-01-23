@@ -2,13 +2,13 @@ import { useCrudOperations } from '@/hooks/useCrudOperations';
 import UserFormModel from '@/pages/System/User/components/UserFormModel';
 import { UserTableColumns } from '@/pages/System/User/components/UserTableColumns';
 import {
-  addUser,
-  disableUser,
-  enableUser,
-  removeUsers,
-  updateUser,
-  users,
-} from '@/services/ant-design-pro/user';
+  deleteUserUsingDelete,
+  disableUserUsingPost,
+  enableUserUsingPost,
+  listUsersUsingGet,
+  saveUserUsingPost,
+  updateUserUsingPost,
+} from '@/services/ant-design-pro/sysUserController';
 import { PlusOutlined } from '@ant-design/icons';
 import { ActionType, FooterToolbar, ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
@@ -22,15 +22,15 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.UserListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.SysUserVO>();
+  const [selectedRowsState, setSelectedRows] = useState<API.SysUserVO[]>([]);
 
   const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
-    addUser,
-    updateUser,
-    removeUsers,
-    enableUser,
-    disableUser,
+    saveUserUsingPost,
+    updateUserUsingPost,
+    deleteUserUsingDelete,
+    enableUserUsingPost,
+    disableUserUsingPost,
   );
 
   function handleStatusChange(id: string, check: boolean) {
@@ -43,7 +43,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
 
   return (
     <>
-      <ProTable<API.UserListItem, API.PageParams & { departmentId: string }>
+      <ProTable<API.SysUserVO>
         headerTitle={'用户列表'}
         actionRef={actionRef}
         rowKey="id"
@@ -58,16 +58,16 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
             <PlusOutlined /> {'新建'}
           </Button>,
         ]}
-        request={async (params: any) => {
-          const dataArray = await users(params);
+        request={async (params: API.listUsersUsingGETParams) => {
+          const dataArray = await listUsersUsingGet(params);
           return {
-            data: dataArray.data?.records,
+            data: dataArray.data?.records ?? [],
             success: true,
           };
         }}
         params={{ departmentId }}
         columns={UserTableColumns({
-          handleEdit: (record: API.UserListItem) => {
+          handleEdit: (record: API.SysUserVO) => {
             handleUpdateModalOpen(true);
             setCurrentRow(record);
           },
@@ -111,7 +111,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value);
+          const success = await handleAdd(value as API.AddUserDTO);
           if (success) {
             handleCreateModalOpen(false);
             if (actionRef.current) {
@@ -125,7 +125,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value);
+          const success = await handleUpdate(currentRow?.id, value as API.UpdateUserDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

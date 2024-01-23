@@ -1,6 +1,5 @@
 // https://umijs.org/config/
 import { defineConfig } from '@umijs/max';
-import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
@@ -94,13 +93,7 @@ export default defineConfig({
    * @name 国际化插件
    * @doc https://umijs.org/docs/max/i18n
    */
-  locale: {
-    // default zh-CN
-    default: 'zh-CN',
-    antd: true,
-    // default true, when it is true, will use `navigator.language` overwrite default
-    baseNavigator: true,
-  },
+  locale: false,
   /**
    * @name antd 插件
    * @description 内置了 babel import 插件
@@ -137,15 +130,8 @@ export default defineConfig({
   openAPI: [
     {
       requestLibPath: "import { request } from '@umijs/max'",
-      // 或者使用在线的版本
-      // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
-      schemaPath: join(__dirname, 'oneapi.json'),
+      schemaPath: 'http://localhost:8080/api/v2/api-docs',
       mock: false,
-    },
-    {
-      requestLibPath: "import { request } from '@umijs/max'",
-      schemaPath: 'https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json',
-      projectName: 'swagger',
     },
   ],
   mfsu: {

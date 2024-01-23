@@ -2,7 +2,7 @@ import { ProColumns } from '@ant-design/pro-components';
 import { Popconfirm, Switch } from 'antd';
 
 interface RoleTableColumnsProps {
-  handleEdit: (record: API.RoleListItem) => void;
+  handleEdit: (record: API.SysRoleVO) => void;
   handleDelete: (id: string) => void;
   handleStatusChange: (id: string, checked: boolean) => void;
 }
@@ -11,7 +11,7 @@ export const RoleTableColumns = ({
   handleEdit,
   handleDelete,
   handleStatusChange,
-}: RoleTableColumnsProps): ProColumns<API.RoleListItem>[] => [
+}: RoleTableColumnsProps): ProColumns<API.SysRoleVO>[] => [
   {
     title: '角色名称',
     dataIndex: 'name',

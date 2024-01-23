@@ -1,19 +1,19 @@
 import { message } from 'antd';
 
 type AddApiFunction<T> = (fields: T) => Promise<any>;
-type UpdateApiFunction<T> = (id: string, fields: T) => Promise<any>;
-type RemoveApiFunction = (ids: string) => Promise<any>;
-type EnableApiFunction = (id: string) => Promise<any>;
-type DisableApiFunction = (id: string) => Promise<any>;
+type UpdateApiFunction<T> = (params: any, fields: T) => Promise<any>;
+type RemoveApiFunction = (params: any) => Promise<any>;
+type EnableApiFunction = (params: any) => Promise<any>;
+type DisableApiFunction = (params: any) => Promise<any>;
 
-export function useCrudOperations<T>(
-  addApi: AddApiFunction<T>,
-  updateApi: UpdateApiFunction<T>,
+export function useCrudOperations<TAdd, TUpdate>(
+  addApi: AddApiFunction<TAdd>,
+  updateApi: UpdateApiFunction<TUpdate>,
   removeApi: RemoveApiFunction,
   enableApi?: EnableApiFunction,
   disableApi?: DisableApiFunction,
 ) {
-  const handleAdd = async (fields: T) => {
+  const handleAdd = async (fields: TAdd) => {
     const hide = message.loading('正在添加');
     try {
       await addApi(fields);
@@ -27,7 +27,7 @@ export function useCrudOperations<T>(
     }
   };
 
-  const handleUpdate = async (id: string | undefined, fields: T) => {
+  const handleUpdate = async (id: string | undefined, fields: TUpdate) => {
     const hide = message.loading('正在修改');
     try {
       await updateApi(id!, fields);

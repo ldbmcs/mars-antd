@@ -1,8 +1,9 @@
 import useDepartmentsTree from '@/hooks/useDepartmentsTree';
-import { departmentsTree } from '@/services/ant-design-pro/department';
-import { roles } from '@/services/ant-design-pro/roles';
+import { listDepartmentsUsingGet } from '@/services/ant-design-pro/sysDepartmentController';
+import { listRolesUsingGet } from '@/services/ant-design-pro/sysRoleController';
 import { ModalForm, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
+import { RequestOptionsType } from '@ant-design/pro-utils/lib';
 import React from 'react';
 
 export type FormValueType = {
@@ -11,14 +12,14 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.UserListItem>;
+} & Partial<API.SysUserVO>;
 
 export type UpdateFormProps = {
   title: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
-  values?: Partial<API.UserListItem>;
+  values?: Partial<API.SysUserVO>;
 };
 
 const UserFormModel: React.FC<UpdateFormProps> = ({
@@ -28,13 +29,15 @@ const UserFormModel: React.FC<UpdateFormProps> = ({
   onSubmit,
   values,
 }) => {
-  const departments = useDepartmentsTree(departmentsTree);
+  const departments = useDepartmentsTree(listDepartmentsUsingGet);
 
-  const requestRoles = async () => {
-    const response = await roles({ page: 1, pageSize: 1000 });
-    return response.data.records.map((item) => {
-      return { label: item.name, value: item.id };
-    });
+  const requestRoles = async (): Promise<RequestOptionsType[]> => {
+    const response = await listRolesUsingGet({ current: 1, pageSize: 1000 });
+    return (
+      response.data?.records?.map((item) => {
+        return { label: item.name, value: item.id };
+      }) ?? []
+    );
   };
 
   return (

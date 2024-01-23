@@ -1,33 +1,33 @@
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import { DeptTableColumns } from '@/pages/System/Dept/components/DeptTableColumns';
 import {
-  addDepartment,
-  departments,
-  disableDepartment,
-  enableDepartment,
-  removeDepartments,
-  updateDepartment,
-} from '@/services/ant-design-pro/department';
+  deleteDepartmentUsingDelete,
+  disableDepartmentUsingPost,
+  enableDepartmentUsingPost,
+  listDepartmentsUsingGet,
+  saveDepartmentUsingPost,
+  updateDepartmentUsingPost,
+} from '@/services/ant-design-pro/sysDepartmentController';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import React, { useRef, useState } from 'react';
-import SaveOrUpdateDepartment from './components/DepartmentFormModel';
+import DepartmentFormModel from './components/DepartmentFormModel';
 
 const Dept: React.FC = () => {
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.DepartmentListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.DepartmentListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.SysDepartmentVO>();
+  const [selectedRowsState, setSelectedRows] = useState<API.SysDepartmentVO[]>([]);
 
   const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
-    addDepartment,
-    updateDepartment,
-    removeDepartments,
-    enableDepartment,
-    disableDepartment,
+    saveDepartmentUsingPost,
+    updateDepartmentUsingPost,
+    deleteDepartmentUsingDelete,
+    enableDepartmentUsingPost,
+    disableDepartmentUsingPost,
   );
 
   function handleStatusChange(id: string, check: boolean) {
@@ -40,7 +40,7 @@ const Dept: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.DepartmentListItem>
+      <ProTable<API.SysDepartmentVO>
         headerTitle={'部门列表'}
         pagination={false}
         actionRef={actionRef}
@@ -59,9 +59,9 @@ const Dept: React.FC = () => {
             <PlusOutlined /> {'新建'}
           </Button>,
         ]}
-        request={departments}
+        request={listDepartmentsUsingGet}
         columns={DeptTableColumns({
-          handleEdit: (record: API.DepartmentListItem) => {
+          handleEdit: (record: API.SysDepartmentVO) => {
             handleUpdateModalOpen(true);
             setCurrentRow(record);
           },
@@ -100,24 +100,24 @@ const Dept: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <SaveOrUpdateDepartment
+      <DepartmentFormModel
         title={'新建'}
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value);
+          const success = await handleAdd(value as API.AddDepartmentDTO);
           if (success) {
             handleCreateModalOpen(false);
             actionRef.current?.reload();
           }
         }}
       />
-      <SaveOrUpdateDepartment
+      <DepartmentFormModel
         title={'编辑'}
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value);
+          const success = await handleUpdate(currentRow?.id, value as API.UpdateDepartmentDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

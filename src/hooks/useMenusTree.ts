@@ -1,12 +1,11 @@
 import { DataNode } from 'antd/lib/tree';
 import { useEffect, useState } from 'react';
 
-const useMenusTree = (menusTreeApi: () => Promise<{ data: API.MenuListItem[] }>) => {
+const useMenusTree = (menusTreeApi: () => Promise<API.ApiResultListSysMenuVO_>) => {
   const [menus, setMenus] = useState<DataNode[]>([]);
 
-  function formatTreeList(list: API.MenuListItem[]) {
+  function formatTreeList(list: API.SysMenuVO[]) {
     list.map((item) => {
-      item.key = item.id;
       if (item['children']) {
         item.children = formatTreeList(item.children);
       }

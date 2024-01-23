@@ -1,8 +1,8 @@
 import { ProColumns } from '@ant-design/pro-components';
 import { Popconfirm, Switch } from 'antd';
 
-interface RoleTableColumnsProps {
-  handleEdit: (record: API.UserListItem) => void;
+interface UserTableColumnsProps {
+  handleEdit: (record: API.SysUserVO) => void;
   handleDelete: (id: string) => void;
   handleStatusChange: (id: string, checked: boolean) => void;
 }
@@ -11,7 +11,7 @@ export const UserTableColumns = ({
   handleEdit,
   handleDelete,
   handleStatusChange,
-}: RoleTableColumnsProps): ProColumns<API.UserListItem>[] => [
+}: UserTableColumnsProps): ProColumns<API.SysUserVO>[] => [
   {
     title: '用户名',
     dataIndex: 'nickname',

@@ -1,5 +1,5 @@
 import useMenusTree from '@/hooks/useMenusTree';
-import { menusTree } from '@/services/ant-design-pro/menu';
+import { listMenusUsingGet } from '@/services/ant-design-pro/sysMenuController';
 import { ModalForm, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
 import React from 'react';
@@ -10,14 +10,14 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.RoleListItem>;
+} & Partial<API.SysRoleVO>;
 
 export type UpdateFormProps = {
   title: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
-  values?: Partial<API.RoleListItem>;
+  values?: Partial<API.SysRoleVO>;
 };
 
 const RoleFormModel: React.FC<UpdateFormProps> = ({
@@ -27,7 +27,7 @@ const RoleFormModel: React.FC<UpdateFormProps> = ({
   values,
   onOpenChange,
 }) => {
-  const menus = useMenusTree(menusTree);
+  const menus = useMenusTree(listMenusUsingGet);
 
   return (
     <ModalForm

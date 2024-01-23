@@ -1,13 +1,13 @@
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import { RoleTableColumns } from '@/pages/System/Role/components/RoleTableColumns';
 import {
-  addRole,
-  disableRole,
-  enableRole,
-  removeRoles,
-  roles,
-  updateRole,
-} from '@/services/ant-design-pro/roles';
+  deleteRoleUsingDelete,
+  disableRoleUsingPost,
+  enableRoleUsingPost,
+  listRolesUsingGet,
+  saveRoleUsingPost,
+  updateRoleUsingPost,
+} from '@/services/ant-design-pro/sysRoleController';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
@@ -19,15 +19,15 @@ const Role: React.FC = () => {
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RoleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RoleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.SysRoleVO>();
+  const [selectedRowsState, setSelectedRows] = useState<API.SysRoleVO[]>([]);
 
   const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
-    addRole,
-    updateRole,
-    removeRoles,
-    enableRole,
-    disableRole,
+    saveRoleUsingPost,
+    updateRoleUsingPost,
+    deleteRoleUsingDelete,
+    enableRoleUsingPost,
+    disableRoleUsingPost,
   );
 
   function handleStatusChange(id: string, check: boolean) {
@@ -40,7 +40,7 @@ const Role: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.RoleListItem, API.PageParams>
+      <ProTable<API.SysRoleVO>
         headerTitle={'角色列表'}
         actionRef={actionRef}
         rowKey="id"
@@ -59,14 +59,14 @@ const Role: React.FC = () => {
           </Button>,
         ]}
         request={async (params: any) => {
-          const dataArray = await roles(params);
+          const dataArray = await listRolesUsingGet(params);
           return {
             data: dataArray.data?.records,
             success: true,
           };
         }}
         columns={RoleTableColumns({
-          handleEdit: (record: API.RoleListItem) => {
+          handleEdit: (record: API.SysRoleVO) => {
             handleUpdateModalOpen(true);
             setCurrentRow(record);
           },
@@ -110,7 +110,7 @@ const Role: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value as API.RoleListItem);
+          const success = await handleAdd(value as API.AddRoleDTO);
           if (success) {
             handleCreateModalOpen(false);
             actionRef.current?.reload();
@@ -122,7 +122,7 @@ const Role: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value);
+          const success = await handleUpdate(currentRow?.id, value as API.UpdateRoleDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

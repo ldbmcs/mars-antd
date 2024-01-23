@@ -2,13 +2,12 @@ import { DataNode } from 'antd/lib/tree';
 import { useEffect, useState } from 'react';
 
 const useDepartmentsTree = (
-  departmentsTreeApi: () => Promise<{ data: API.DepartmentListItem[] }>,
+  departmentsTreeApi: () => Promise<API.ApiResultListSysDepartmentVO_>,
 ) => {
   const [departments, setDepartments] = useState<DataNode[]>([]);
 
-  function formatTreeList(list: API.DepartmentListItem[]) {
+  function formatTreeList(list: API.SysDepartmentVO[]) {
     list.map((item) => {
-      item.key = item.id;
       if (item['children']) {
         item.children = formatTreeList(item.children);
       }

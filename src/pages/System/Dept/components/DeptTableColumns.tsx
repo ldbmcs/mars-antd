@@ -2,7 +2,7 @@ import { ProColumns } from '@ant-design/pro-components';
 import { Popconfirm, Switch } from 'antd';
 
 interface DeptTableColumnsProps {
-  handleEdit: (record: API.DepartmentListItem) => void;
+  handleEdit: (record: API.SysDepartmentVO) => void;
   handleDelete: (id: string) => void;
   handleStatusChange: (id: string, checked: boolean) => void;
 }
@@ -11,7 +11,7 @@ export const DeptTableColumns = ({
   handleEdit,
   handleDelete,
   handleStatusChange,
-}: DeptTableColumnsProps): ProColumns<API.DepartmentListItem>[] => [
+}: DeptTableColumnsProps): ProColumns<API.SysDepartmentVO>[] => [
   {
     title: '部门名称',
     dataIndex: 'name',
