@@ -26,28 +26,6 @@ declare namespace API {
     pageSize?: number;
   };
 
-  type RuleListItem = {
-    key?: number;
-    disabled?: boolean;
-    href?: string;
-    avatar?: string;
-    name?: string;
-    owner?: string;
-    desc?: string;
-    callNo?: number;
-    status?: number;
-    updatedAt?: string;
-    createdAt?: string;
-    progress?: number;
-  };
-
-  type RuleList = {
-    data?: RuleListItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
-  };
-
   type FakeCaptcha = {
     code?: number;
     status?: string;
@@ -88,49 +66,5 @@ declare namespace API {
     datetime?: string;
     description?: string;
     type?: NoticeIconItemType;
-  };
-
-  type MenuListItem = {
-    id?: string;
-    name?: string;
-    path?: string;
-    icon?: string;
-    index?: number;
-    enabled?: number;
-    createdAt?: string;
-  };
-
-  type MenuList = {
-    data?: MenuListItem[];
-    total?: number;
-    success?: boolean;
-  };
-
-  type RoleListItem = {
-    id?: string;
-    name?: string;
-    code?: string;
-    enabled?: number;
-    createdAt?: string;
-  };
-
-  type RoleList = {
-    data?: RoleListItem[];
-    total?: number;
-    success?: boolean;
-  };
-
-  type UserListItem = {
-    id?: string;
-    username?: string;
-    nickname?: string;
-    enabled?: number;
-    createdAt?: string;
-  };
-
-  type UserList = {
-    data?: UserListItem[];
-    total?: number;
-    success?: boolean;
   };
 }

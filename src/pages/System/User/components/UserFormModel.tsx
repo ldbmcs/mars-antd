@@ -1,14 +1,9 @@
+import useDepartmentsTree from '@/hooks/useDepartmentsTree';
 import { departmentsTree } from '@/services/ant-design-pro/department';
-import {
-  ModalForm,
-  ProForm,
-  ProFormSelect,
-  ProFormText,
-  ProFormTextArea,
-} from '@ant-design/pro-components';
+import { roles } from '@/services/ant-design-pro/roles';
+import { ModalForm, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
-import { DataNode } from 'antd/es/tree';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 export type FormValueType = {
   target?: string;
@@ -16,36 +11,32 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.RuleListItem>;
+} & Partial<API.UserListItem>;
 
 export type UpdateFormProps = {
   title: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
-  values?: Partial<API.RuleListItem>;
+  values?: Partial<API.UserListItem>;
 };
 
-const CreateOrUpdateUserFormModel: React.FC<UpdateFormProps> = ({
+const UserFormModel: React.FC<UpdateFormProps> = ({
   title,
   open,
   onOpenChange,
   onSubmit,
   values,
 }) => {
-  const [treeData, setTreeData] = useState<DataNode[]>([]);
+  const departments = useDepartmentsTree(departmentsTree);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await departmentsTree();
-        setTreeData(response.data as DataNode[]);
-      } catch (error) {
-        console.error('Error fetching tree data:', error);
-      }
-    };
-    fetchData().then();
-  }, []);
+  const requestRoles = async () => {
+    const response = await roles({ page: 1, pageSize: 1000 });
+    return response.data.records.map((item) => {
+      return { label: item.name, value: item.id };
+    });
+  };
+
   return (
     <ModalForm
       title={title}
@@ -79,17 +70,6 @@ const CreateOrUpdateUserFormModel: React.FC<UpdateFormProps> = ({
         />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormSelect
-          name="positionId"
-          label="职位"
-          width={'md'}
-          request={async () => [
-            { label: '全部', value: 'all' },
-            { label: '未解决', value: 'open' },
-            { label: '已解决', value: 'closed' },
-            { label: '解决中', value: 'processing' },
-          ]}
-        />
         <ProFormText
           rules={[
             {
@@ -98,22 +78,21 @@ const CreateOrUpdateUserFormModel: React.FC<UpdateFormProps> = ({
             },
           ]}
           width="md"
-          name="phone"
+          name="mobile"
           label={'手机号'}
         />
       </ProForm.Group>
       <ProForm.Group>
         <ProFormSelect
-          name="roleId"
+          name="roleIds"
           label="角色"
           width={'md'}
           rules={[{ required: true, message: '请选择角色' }]}
-          request={async () => [
-            { label: '全部', value: 'all' },
-            { label: '未解决', value: 'open' },
-            { label: '已解决', value: 'closed' },
-            { label: '解决中', value: 'processing' },
-          ]}
+          request={requestRoles}
+          fieldProps={{
+            mode: 'multiple',
+            labelInValue: false,
+          }}
         />
         <ProFormTreeSelect
           name="departmentId"
@@ -121,33 +100,27 @@ const CreateOrUpdateUserFormModel: React.FC<UpdateFormProps> = ({
           allowClear
           width={330}
           secondary
-          rules={[
-            {
-              required: true,
-              message: '部门为必填项',
-            },
-          ]}
           request={async () => {
-            return treeData;
+            return departments;
           }}
           fieldProps={{
             suffixIcon: null,
             filterTreeNode: true,
             showSearch: true,
             popupMatchSelectWidth: false,
-            labelInValue: true,
+            labelInValue: false,
             autoClearSearchValue: true,
-            multiple: true,
             treeNodeFilterProp: 'name',
+            treeDefaultExpandAll: true,
             fieldNames: {
               label: 'name',
+              value: 'id',
             },
           }}
         />
       </ProForm.Group>
-      <ProFormTextArea width="xl" name="remark" label={'备注'} />
     </ModalForm>
   );
 };
 
-export default CreateOrUpdateUserFormModel;
+export default UserFormModel;

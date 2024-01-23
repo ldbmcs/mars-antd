@@ -1,3 +1,5 @@
+import { useCrudOperations } from '@/hooks/useCrudOperations';
+import { DeptTableColumns } from '@/pages/System/Dept/components/DeptTableColumns';
 import {
   addDepartment,
   departments,
@@ -7,42 +9,11 @@ import {
   updateDepartment,
 } from '@/services/ant-design-pro/department';
 import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import type { ActionType } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Switch } from 'antd';
+import { Button } from 'antd';
 import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/CreateOrUpdateDepartmentFormModel';
-import SaveOrUpdateDepartment from './components/CreateOrUpdateDepartmentFormModel';
-
-const handleAdd = async (fields: FormValueType) => {
-  try {
-    await addDepartment({ ...fields });
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    message.error('添加失败，请重试！');
-    return false;
-  }
-};
-
-const handleUpdate = async (id: string | undefined, fields: FormValueType) => {
-  await updateDepartment(id!, { ...fields });
-  message.success('操作成功');
-  return true;
-};
-
-const handleDelete = async (selectedRows: API.DepartmentListItem[]) => {
-  if (!selectedRows) return true;
-  await removeDepartments(selectedRows.map((row) => row.id).join(','));
-  message.success('操作成功');
-  return true;
-};
-
-const handleSingleDelete = async (id: string | undefined, current: ActionType | undefined) => {
-  await removeDepartments(id!);
-  current?.reload();
-  message.success('操作成功');
-};
+import SaveOrUpdateDepartment from './components/DepartmentFormModel';
 
 const Dept: React.FC = () => {
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
@@ -51,70 +22,21 @@ const Dept: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.DepartmentListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.DepartmentListItem[]>([]);
 
+  const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
+    addDepartment,
+    updateDepartment,
+    removeDepartments,
+    enableDepartment,
+    disableDepartment,
+  );
+
   function handleStatusChange(id: string, check: boolean) {
     if (check) {
-      enableDepartment(id).then(() => actionRef.current?.reload());
+      handleEnable(id).then(() => actionRef.current?.reload());
     } else {
-      disableDepartment(id).then(() => actionRef.current?.reload());
+      handleDisable(id).then(() => actionRef.current?.reload());
     }
   }
-
-  const columns: ProColumns<API.DepartmentListItem>[] = [
-    {
-      title: '部门名称',
-      dataIndex: 'name',
-    },
-    {
-      title: '排序',
-      dataIndex: 'sort',
-      hideInForm: true,
-      hideInSearch: true,
-    },
-    {
-      title: '状态',
-      dataIndex: 'enabled',
-      hideInSearch: true,
-      render: (item, props) => (
-        <Switch
-          checked={props.enabled}
-          onChange={(checked) => {
-            handleStatusChange(props.id!, checked);
-          }}
-        />
-      ),
-    },
-    {
-      title: '创建时间',
-      sorter: true,
-      dataIndex: 'createdAt',
-      valueType: 'dateTime',
-    },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => [
-        <a
-          key="edit"
-          onClick={() => {
-            handleUpdateModalOpen(true);
-            setCurrentRow(record);
-          }}
-        >
-          {'编辑'}
-        </a>,
-        <Popconfirm
-          title="是否要删除这个部门?"
-          onConfirm={() => handleSingleDelete(record.id, actionRef.current)}
-          okText="确认"
-          cancelText="取消"
-          key="delete"
-        >
-          <a>{'删除'}</a>
-        </Popconfirm>,
-      ],
-    },
-  ];
 
   return (
     <PageContainer>
@@ -138,7 +60,19 @@ const Dept: React.FC = () => {
           </Button>,
         ]}
         request={departments}
-        columns={columns}
+        columns={DeptTableColumns({
+          handleEdit: (record: API.DepartmentListItem) => {
+            handleUpdateModalOpen(true);
+            setCurrentRow(record);
+          },
+          handleDelete: async (id: string) => {
+            const success = await handleDelete(id!);
+            if (success) {
+              actionRef.current?.reload();
+            }
+          },
+          handleStatusChange,
+        })}
         rowSelection={{
           onChange: (_, selectedRows) => {
             setSelectedRows(selectedRows);
@@ -157,7 +91,7 @@ const Dept: React.FC = () => {
         >
           <Button
             onClick={async () => {
-              await handleDelete(selectedRowsState);
+              await handleDelete(selectedRowsState.map((row) => row.id).join(','));
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
