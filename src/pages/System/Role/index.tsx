@@ -1,11 +1,10 @@
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import { RoleTableColumns } from '@/pages/System/Role/components/RoleTableColumns';
 import {
-  deleteRoleUsingDelete,
-  disableRoleUsingPost,
-  enableRoleUsingPost,
+  deleteRolesUsingDelete,
   listRolesUsingGet,
   saveRoleUsingPost,
+  toggleRoleUsingPost,
   updateRoleUsingPost,
 } from '@/services/ant-design-pro/sysRoleController';
 import { PlusOutlined } from '@ant-design/icons';
@@ -22,21 +21,12 @@ const Role: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.SysRoleVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.SysRoleVO[]>([]);
 
-  const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
+  const { handleAdd, handleUpdate, handleDelete, handleToggle } = useCrudOperations(
     saveRoleUsingPost,
     updateRoleUsingPost,
-    deleteRoleUsingDelete,
-    enableRoleUsingPost,
-    disableRoleUsingPost,
+    deleteRolesUsingDelete,
+    toggleRoleUsingPost,
   );
-
-  function handleStatusChange(id: string, check: boolean) {
-    if (check) {
-      handleEnable(id).then(() => actionRef.current?.reload());
-    } else {
-      handleDisable(id).then(() => actionRef.current?.reload());
-    }
-  }
 
   return (
     <PageContainer>
@@ -76,7 +66,9 @@ const Role: React.FC = () => {
               actionRef.current?.reload();
             }
           },
-          handleStatusChange,
+          handleStatusChange: (id: string, checked: boolean) => {
+            handleToggle({ id, enabled: checked }).then(() => actionRef.current?.reload());
+          },
         })}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -110,7 +102,7 @@ const Role: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value as API.AddRoleDTO);
+          const success = await handleAdd(value as API.RoleDTO);
           if (success) {
             handleCreateModalOpen(false);
             actionRef.current?.reload();
@@ -122,7 +114,7 @@ const Role: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value as API.UpdateRoleDTO);
+          const success = await handleUpdate(currentRow?.id, value as API.RoleDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

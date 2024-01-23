@@ -1,133 +1,76 @@
 declare namespace API {
-  type AddDepartmentDTO = {
-    name: string;
-    parentId?: string;
-    sort?: number;
-  };
-
-  type AddMenuDTO = {
-    component?: string;
-    icon?: string;
-    name: string;
-    parentId?: string;
-    path?: string;
-    permission?: string;
-    sort?: number;
-    type: number;
-  };
-
-  type AddRoleDTO = {
-    menuIds?: string[];
-    name: string;
-  };
-
-  type AddUserDTO = {
-    departmentId: string;
-    mobile: string;
-    nickname: string;
-    roleIds?: string[];
-    username: string;
-  };
-
   type ApiResultIPageSysRoleVO_ = {
-    code?: number;
     data?: IPageSysRoleVO_;
-    msg?: string;
+    errorCode?: number;
+    errorMessage?: string;
+    success?: boolean;
   };
 
   type ApiResultIPageSysUserVO_ = {
-    code?: number;
     data?: IPageSysUserVO_;
-    msg?: string;
+    errorCode?: number;
+    errorMessage?: string;
+    success?: boolean;
   };
 
   type ApiResultListSysDepartmentVO_ = {
-    code?: number;
     data?: SysDepartmentVO[];
-    msg?: string;
+    errorCode?: number;
+    errorMessage?: string;
+    success?: boolean;
   };
 
   type ApiResultListSysMenuVO_ = {
-    code?: number;
     data?: SysMenuVO[];
-    msg?: string;
+    errorCode?: number;
+    errorMessage?: string;
+    success?: boolean;
   };
 
   type ApiResultSaTokenInfo_ = {
-    code?: number;
     data?: SaTokenInfo;
-    msg?: string;
+    errorCode?: number;
+    errorMessage?: string;
+    success?: boolean;
   };
 
   type ApiResultSysUser_ = {
-    code?: number;
     data?: SysUser;
-    msg?: string;
+    errorCode?: number;
+    errorMessage?: string;
+    success?: boolean;
   };
 
   type ApiResultVoid_ = {
-    code?: number;
-    msg?: string;
+    errorCode?: number;
+    errorMessage?: string;
+    success?: boolean;
   };
 
-  type deleteDepartmentUsingDELETEParams = {
+  type deleteDepartmentsUsingDELETEParams = {
     /** ids */
     ids: string;
   };
 
-  type deleteMenuUsingDELETEParams = {
-    /** id */
-    id: string;
+  type deleteMenusUsingDELETEParams = {
+    /** ids */
+    ids: string;
   };
 
-  type deleteRoleUsingDELETEParams = {
-    /** id */
-    id: string;
+  type deleteRolesUsingDELETEParams = {
+    /** ids */
+    ids: string;
   };
 
-  type deleteUserUsingDELETEParams = {
-    /** id */
-    id: string;
+  type deleteUsersUsingDELETEParams = {
+    /** ids */
+    ids: string;
   };
 
-  type disableDepartmentUsingPOSTParams = {
-    /** id */
-    id: string;
-  };
-
-  type disableMenuUsingPOSTParams = {
-    /** id */
-    id: string;
-  };
-
-  type disableRoleUsingPOSTParams = {
-    /** id */
-    id: string;
-  };
-
-  type disableUserUsingPOSTParams = {
-    /** id */
-    id: string;
-  };
-
-  type enableDepartmentUsingPOSTParams = {
-    /** id */
-    id: string;
-  };
-
-  type enableMenuUsingPOSTParams = {
-    /** id */
-    id: string;
-  };
-
-  type enableRoleUsingPOSTParams = {
-    /** id */
-    id: string;
-  };
-
-  type enableUserUsingPOSTParams = {
-    /** id */
-    id: string;
+  type DepartmentDTO = {
+    name: string;
+    parentId?: string;
+    sort?: number;
   };
 
   type IPageSysRoleVO_ = {
@@ -154,6 +97,22 @@ declare namespace API {
   type listUsersUsingGETParams = {
     current?: number;
     pageSize?: number;
+  };
+
+  type MenuDTO = {
+    component?: string;
+    icon?: string;
+    name: string;
+    parentId?: string;
+    path?: string;
+    permission?: string;
+    sort?: number;
+    type: number;
+  };
+
+  type RoleDTO = {
+    menuIds?: string[];
+    name: string;
   };
 
   type SaTokenInfo = {
@@ -235,10 +194,32 @@ declare namespace API {
     username?: string;
   };
 
-  type UpdateDepartmentDTO = {
-    name: string;
-    parentId?: string;
-    sort?: number;
+  type toggleDepartmentUsingPOSTParams = {
+    /** enabled */
+    enabled: boolean;
+    /** id */
+    id: string;
+  };
+
+  type toggleMenuUsingPOSTParams = {
+    /** enabled */
+    enabled: boolean;
+    /** id */
+    id: string;
+  };
+
+  type toggleRoleUsingPOSTParams = {
+    /** enabled */
+    enabled: boolean;
+    /** id */
+    id: string;
+  };
+
+  type toggleUserUsingPOSTParams = {
+    /** enabled */
+    enabled: boolean;
+    /** id */
+    id: string;
   };
 
   type updateDepartmentUsingPOSTParams = {
@@ -246,25 +227,9 @@ declare namespace API {
     id: string;
   };
 
-  type UpdateMenuDTO = {
-    component?: string;
-    icon?: string;
-    name: string;
-    parentId?: string;
-    path?: string;
-    permission: string;
-    sort?: number;
-    type: number;
-  };
-
   type updateMenuUsingPOSTParams = {
     /** id */
     id: string;
-  };
-
-  type UpdateRoleDTO = {
-    menuIds?: string[];
-    name: string;
   };
 
   type updateRoleUsingPOSTParams = {
@@ -272,16 +237,16 @@ declare namespace API {
     id: string;
   };
 
-  type UpdateUserDTO = {
+  type updateUserUsingPOSTParams = {
+    /** id */
+    id: string;
+  };
+
+  type UserDTO = {
     departmentId: string;
     mobile: string;
     nickname: string;
     roleIds?: string[];
     username: string;
-  };
-
-  type updateUserUsingPOSTParams = {
-    /** id */
-    id: string;
   };
 }

@@ -2,11 +2,10 @@ import { useCrudOperations } from '@/hooks/useCrudOperations';
 import UserFormModel from '@/pages/System/User/components/UserFormModel';
 import { UserTableColumns } from '@/pages/System/User/components/UserTableColumns';
 import {
-  deleteUserUsingDelete,
-  disableUserUsingPost,
-  enableUserUsingPost,
+  deleteUsersUsingDelete,
   listUsersUsingGet,
   saveUserUsingPost,
+  toggleUserUsingPost,
   updateUserUsingPost,
 } from '@/services/ant-design-pro/sysUserController';
 import { PlusOutlined } from '@ant-design/icons';
@@ -25,21 +24,12 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
   const [currentRow, setCurrentRow] = useState<API.SysUserVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.SysUserVO[]>([]);
 
-  const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
+  const { handleAdd, handleUpdate, handleDelete, handleToggle } = useCrudOperations(
     saveUserUsingPost,
     updateUserUsingPost,
-    deleteUserUsingDelete,
-    enableUserUsingPost,
-    disableUserUsingPost,
+    deleteUsersUsingDelete,
+    toggleUserUsingPost,
   );
-
-  function handleStatusChange(id: string, check: boolean) {
-    if (check) {
-      handleEnable(id).then(() => actionRef.current?.reload());
-    } else {
-      handleDisable(id).then(() => actionRef.current?.reload());
-    }
-  }
 
   return (
     <>
@@ -77,7 +67,9 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
               actionRef.current?.reload();
             }
           },
-          handleStatusChange,
+          handleStatusChange: (id: string, checked: boolean) => {
+            handleToggle({ id, enabled: checked }).then(() => actionRef.current?.reload());
+          },
         })}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -111,7 +103,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value as API.AddUserDTO);
+          const success = await handleAdd(value as API.UserDTO);
           if (success) {
             handleCreateModalOpen(false);
             if (actionRef.current) {
@@ -125,7 +117,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value as API.UpdateUserDTO);
+          const success = await handleUpdate(currentRow?.id, value as API.UserDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

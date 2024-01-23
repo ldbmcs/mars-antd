@@ -11,7 +11,7 @@ export async function listMenusUsingGet(options?: { [key: string]: any }) {
 }
 
 /** saveMenu POST /api/system/menus */
-export async function saveMenuUsingPost(body: API.AddMenuDTO, options?: { [key: string]: any }) {
+export async function saveMenuUsingPost(body: API.MenuDTO, options?: { [key: string]: any }) {
   return request<API.ApiResultVoid_>('/api/system/menus', {
     method: 'POST',
     headers: {
@@ -22,11 +22,25 @@ export async function saveMenuUsingPost(body: API.AddMenuDTO, options?: { [key: 
   });
 }
 
+/** deleteMenus DELETE /api/system/menus/${param0} */
+export async function deleteMenusUsingDelete(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteMenusUsingDELETEParams,
+  options?: { [key: string]: any },
+) {
+  const { ids: param0, ...queryParams } = params;
+  return request<API.ApiResultVoid_>(`/api/system/menus/${param0}`, {
+    method: 'DELETE',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** updateMenu POST /api/system/menus/${param0} */
 export async function updateMenuUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateMenuUsingPOSTParams,
-  body: API.UpdateMenuDTO,
+  body: API.MenuDTO,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
@@ -41,44 +55,18 @@ export async function updateMenuUsingPost(
   });
 }
 
-/** deleteMenu DELETE /api/system/menus/${param0} */
-export async function deleteMenuUsingDelete(
+/** toggleMenu POST /api/system/menus/${param0}/status */
+export async function toggleMenuUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteMenuUsingDELETEParams,
+  params: API.toggleMenuUsingPOSTParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/menus/${param0}`, {
-    method: 'DELETE',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** disableMenu POST /api/system/menus/${param0}/disable */
-export async function disableMenuUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.disableMenuUsingPOSTParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/menus/${param0}/disable`, {
+  return request<API.ApiResultVoid_>(`/api/system/menus/${param0}/status`, {
     method: 'POST',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** enableMenu POST /api/system/menus/${param0}/enable */
-export async function enableMenuUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.enableMenuUsingPOSTParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/menus/${param0}/enable`, {
-    method: 'POST',
-    params: { ...queryParams },
+    params: {
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }

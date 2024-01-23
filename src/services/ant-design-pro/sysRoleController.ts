@@ -18,7 +18,7 @@ export async function listRolesUsingGet(
 }
 
 /** saveRole POST /api/system/roles */
-export async function saveRoleUsingPost(body: API.AddRoleDTO, options?: { [key: string]: any }) {
+export async function saveRoleUsingPost(body: API.RoleDTO, options?: { [key: string]: any }) {
   return request<API.ApiResultVoid_>('/api/system/roles', {
     method: 'POST',
     headers: {
@@ -29,11 +29,25 @@ export async function saveRoleUsingPost(body: API.AddRoleDTO, options?: { [key: 
   });
 }
 
+/** deleteRoles DELETE /api/system/roles/${param0} */
+export async function deleteRolesUsingDelete(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteRolesUsingDELETEParams,
+  options?: { [key: string]: any },
+) {
+  const { ids: param0, ...queryParams } = params;
+  return request<API.ApiResultVoid_>(`/api/system/roles/${param0}`, {
+    method: 'DELETE',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** updateRole POST /api/system/roles/${param0} */
 export async function updateRoleUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateRoleUsingPOSTParams,
-  body: API.UpdateRoleDTO,
+  body: API.RoleDTO,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
@@ -48,44 +62,18 @@ export async function updateRoleUsingPost(
   });
 }
 
-/** deleteRole DELETE /api/system/roles/${param0} */
-export async function deleteRoleUsingDelete(
+/** toggleRole POST /api/system/roles/${param0}/status */
+export async function toggleRoleUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteRoleUsingDELETEParams,
+  params: API.toggleRoleUsingPOSTParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/roles/${param0}`, {
-    method: 'DELETE',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** disableRole POST /api/system/roles/${param0}/disable */
-export async function disableRoleUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.disableRoleUsingPOSTParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/roles/${param0}/disable`, {
+  return request<API.ApiResultVoid_>(`/api/system/roles/${param0}/status`, {
     method: 'POST',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** enableRole POST /api/system/roles/${param0}/enable */
-export async function enableRoleUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.enableRoleUsingPOSTParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/roles/${param0}/enable`, {
-    method: 'POST',
-    params: { ...queryParams },
+    params: {
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }

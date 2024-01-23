@@ -2,11 +2,10 @@ import { useCrudOperations } from '@/hooks/useCrudOperations';
 import SaveOrUpdateUserForm from '@/pages/System/Menu/components/MenuFormModel';
 import { menuTableColumns } from '@/pages/System/Menu/components/MenuTableColumns';
 import {
-  deleteMenuUsingDelete,
-  disableMenuUsingPost,
-  enableMenuUsingPost,
+  deleteMenusUsingDelete,
   listMenusUsingGet,
   saveMenuUsingPost,
+  toggleMenuUsingPost,
   updateMenuUsingPost,
 } from '@/services/ant-design-pro/sysMenuController';
 import { PlusOutlined } from '@ant-design/icons';
@@ -21,21 +20,12 @@ const Menu: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.SysMenuVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.SysMenuVO[]>([]);
 
-  const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
+  const { handleAdd, handleUpdate, handleDelete, handleToggle } = useCrudOperations(
     saveMenuUsingPost,
     updateMenuUsingPost,
-    deleteMenuUsingDelete,
-    enableMenuUsingPost,
-    disableMenuUsingPost,
+    deleteMenusUsingDelete,
+    toggleMenuUsingPost,
   );
-
-  function handleStatusChange(id: string, check: boolean) {
-    if (check) {
-      handleEnable(id).then(() => actionRef.current?.reload());
-    } else {
-      handleDisable(id).then(() => actionRef.current?.reload());
-    }
-  }
 
   return (
     <PageContainer>
@@ -69,7 +59,9 @@ const Menu: React.FC = () => {
               actionRef.current?.reload();
             }
           },
-          handleStatusChange,
+          handleStatusChange: (id: string, checked: boolean) => {
+            handleToggle({ id, enabled: checked }).then(() => actionRef.current?.reload());
+          },
         })}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -103,7 +95,7 @@ const Menu: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value as API.AddMenuDTO);
+          const success = await handleAdd(value as API.MenuDTO);
           if (success) {
             handleCreateModalOpen(false);
             if (actionRef.current) {
@@ -117,7 +109,7 @@ const Menu: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value as API.UpdateMenuDTO);
+          const success = await handleUpdate(currentRow?.id, value as API.MenuDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

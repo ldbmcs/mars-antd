@@ -12,7 +12,7 @@ export async function listDepartmentsUsingGet(options?: { [key: string]: any }) 
 
 /** saveDepartment POST /api/system/departments */
 export async function saveDepartmentUsingPost(
-  body: API.AddDepartmentDTO,
+  body: API.DepartmentDTO,
   options?: { [key: string]: any },
 ) {
   return request<API.ApiResultVoid_>('/api/system/departments', {
@@ -25,10 +25,10 @@ export async function saveDepartmentUsingPost(
   });
 }
 
-/** deleteDepartment DELETE /api/system/departments/${param0} */
-export async function deleteDepartmentUsingDelete(
+/** deleteDepartments DELETE /api/system/departments/${param0} */
+export async function deleteDepartmentsUsingDelete(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteDepartmentUsingDELETEParams,
+  params: API.deleteDepartmentsUsingDELETEParams,
   options?: { [key: string]: any },
 ) {
   const { ids: param0, ...queryParams } = params;
@@ -43,7 +43,7 @@ export async function deleteDepartmentUsingDelete(
 export async function updateDepartmentUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateDepartmentUsingPOSTParams,
-  body: API.UpdateDepartmentDTO,
+  body: API.DepartmentDTO,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
@@ -58,30 +58,18 @@ export async function updateDepartmentUsingPost(
   });
 }
 
-/** disableDepartment POST /api/system/departments/${param0}/disable */
-export async function disableDepartmentUsingPost(
+/** toggleDepartment POST /api/system/departments/${param0}/status */
+export async function toggleDepartmentUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.disableDepartmentUsingPOSTParams,
+  params: API.toggleDepartmentUsingPOSTParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/departments/${param0}/disable`, {
+  return request<API.ApiResultVoid_>(`/api/system/departments/${param0}/status`, {
     method: 'POST',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** enableDepartment POST /api/system/departments/${param0}/enable */
-export async function enableDepartmentUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.enableDepartmentUsingPOSTParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/departments/${param0}/enable`, {
-    method: 'POST',
-    params: { ...queryParams },
+    params: {
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }

@@ -95,18 +95,7 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
           },
         }}
       />
-      <ProFormDigit
-        fieldProps={{ precision: 0 }}
-        rules={[
-          {
-            required: true,
-            message: '请输入排序',
-          },
-        ]}
-        width="md"
-        name="sort"
-        label={'排序'}
-      />
+      <ProFormDigit fieldProps={{ precision: 0 }} width="md" name="sort" label={'排序'} />
     </ModalForm>
   );
 };

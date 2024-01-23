@@ -1,11 +1,10 @@
 import { useCrudOperations } from '@/hooks/useCrudOperations';
 import { DeptTableColumns } from '@/pages/System/Dept/components/DeptTableColumns';
 import {
-  deleteDepartmentUsingDelete,
-  disableDepartmentUsingPost,
-  enableDepartmentUsingPost,
+  deleteDepartmentsUsingDelete,
   listDepartmentsUsingGet,
   saveDepartmentUsingPost,
+  toggleDepartmentUsingPost,
   updateDepartmentUsingPost,
 } from '@/services/ant-design-pro/sysDepartmentController';
 import { PlusOutlined } from '@ant-design/icons';
@@ -22,21 +21,12 @@ const Dept: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.SysDepartmentVO>();
   const [selectedRowsState, setSelectedRows] = useState<API.SysDepartmentVO[]>([]);
 
-  const { handleAdd, handleUpdate, handleDelete, handleEnable, handleDisable } = useCrudOperations(
+  const { handleAdd, handleUpdate, handleDelete, handleToggle } = useCrudOperations(
     saveDepartmentUsingPost,
     updateDepartmentUsingPost,
-    deleteDepartmentUsingDelete,
-    enableDepartmentUsingPost,
-    disableDepartmentUsingPost,
+    deleteDepartmentsUsingDelete,
+    toggleDepartmentUsingPost,
   );
-
-  function handleStatusChange(id: string, check: boolean) {
-    if (check) {
-      handleEnable(id).then(() => actionRef.current?.reload());
-    } else {
-      handleDisable(id).then(() => actionRef.current?.reload());
-    }
-  }
 
   return (
     <PageContainer>
@@ -71,7 +61,9 @@ const Dept: React.FC = () => {
               actionRef.current?.reload();
             }
           },
-          handleStatusChange,
+          handleStatusChange: (id: string, checked: boolean) => {
+            handleToggle({ id, enabled: checked }).then(() => actionRef.current?.reload());
+          },
         })}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -105,7 +97,7 @@ const Dept: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value as API.AddDepartmentDTO);
+          const success = await handleAdd(value as API.DepartmentDTO);
           if (success) {
             handleCreateModalOpen(false);
             actionRef.current?.reload();
@@ -117,7 +109,7 @@ const Dept: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value as API.UpdateDepartmentDTO);
+          const success = await handleUpdate(currentRow?.id, value as API.DepartmentDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

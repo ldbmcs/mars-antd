@@ -31,7 +31,7 @@ export async function signInUsingPost(body: API.SignInUserDTO, options?: { [key:
 }
 
 /** signUp POST /api/auth/signUp */
-export async function signUpUsingPost(body: API.AddUserDTO, options?: { [key: string]: any }) {
+export async function signUpUsingPost(body: API.UserDTO, options?: { [key: string]: any }) {
   return request<API.ApiResultVoid_>('/api/auth/signUp', {
     method: 'POST',
     headers: {

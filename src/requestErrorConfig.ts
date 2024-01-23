@@ -66,7 +66,7 @@ export const errorConfig: RequestConfig = {
               // TODO: redirect
               break;
             default:
-              message.error(errorMessage);
+            // message.error(errorMessage);
           }
         }
       } else if (error.response) {
@@ -101,7 +101,7 @@ export const errorConfig: RequestConfig = {
       const { data } = response as unknown as ResponseStructure;
 
       if (data?.success === false) {
-        message.error('请求失败！');
+        message.error(data.errorMessage).then();
       }
       return response;
     },

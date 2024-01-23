@@ -18,7 +18,7 @@ export async function listUsersUsingGet(
 }
 
 /** saveUser POST /api/system/users */
-export async function saveUserUsingPost(body: API.AddUserDTO, options?: { [key: string]: any }) {
+export async function saveUserUsingPost(body: API.UserDTO, options?: { [key: string]: any }) {
   return request<API.ApiResultVoid_>('/api/system/users', {
     method: 'POST',
     headers: {
@@ -29,11 +29,25 @@ export async function saveUserUsingPost(body: API.AddUserDTO, options?: { [key: 
   });
 }
 
+/** deleteUsers DELETE /api/system/users/${param0} */
+export async function deleteUsersUsingDelete(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.deleteUsersUsingDELETEParams,
+  options?: { [key: string]: any },
+) {
+  const { ids: param0, ...queryParams } = params;
+  return request<API.ApiResultVoid_>(`/api/system/users/${param0}`, {
+    method: 'DELETE',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** updateUser POST /api/system/users/${param0} */
 export async function updateUserUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.updateUserUsingPOSTParams,
-  body: API.UpdateUserDTO,
+  body: API.UserDTO,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
@@ -48,44 +62,18 @@ export async function updateUserUsingPost(
   });
 }
 
-/** deleteUser DELETE /api/system/users/${param0} */
-export async function deleteUserUsingDelete(
+/** toggleUser POST /api/system/users/${param0}/status */
+export async function toggleUserUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteUserUsingDELETEParams,
+  params: API.toggleUserUsingPOSTParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/users/${param0}`, {
-    method: 'DELETE',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** disableUser POST /api/system/users/${param0}/disable */
-export async function disableUserUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.disableUserUsingPOSTParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/users/${param0}/disable`, {
+  return request<API.ApiResultVoid_>(`/api/system/users/${param0}/status`, {
     method: 'POST',
-    params: { ...queryParams },
-    ...(options || {}),
-  });
-}
-
-/** enableUser POST /api/system/users/${param0}/enable */
-export async function enableUserUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.enableUserUsingPOSTParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
-  return request<API.ApiResultVoid_>(`/api/system/users/${param0}/enable`, {
-    method: 'POST',
-    params: { ...queryParams },
+    params: {
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }
