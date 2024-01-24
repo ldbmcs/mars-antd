@@ -5,7 +5,7 @@ import DepartmentsTree from './components/DepartmentsTree';
 import UsersTable from './components/UsersTable';
 
 const Users: React.FC = () => {
-  const [departmentId, setDepartmentId] = useState<string>('0');
+  const [departmentId, setDepartmentId] = useState<string>('');
   return (
     <PageContainer>
       <GridContent>

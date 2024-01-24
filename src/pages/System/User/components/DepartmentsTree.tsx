@@ -27,8 +27,23 @@ const DepartmentsTree: React.FC<DepartmentsTreeProps> = ({ onChange }: Departmen
     onChange(selectedKeys[0] as string);
   };
 
+  const getAllNodeKeys = (treeData: DataNode[]): string[] => {
+    const keys: string[] = [];
+    treeData.forEach((node) => {
+      // @ts-ignore
+      keys.push(node.id as string);
+      if (node.children) {
+        keys.push(...getAllNodeKeys(node.children));
+      }
+    });
+    return keys;
+  };
+
+  const allKeys = getAllNodeKeys(treeData);
+
   return (
     <Tree
+      expandedKeys={allKeys}
       showLine
       switcherIcon={<DownOutlined />}
       onSelect={onSelect}
