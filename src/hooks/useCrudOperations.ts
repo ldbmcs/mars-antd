@@ -24,10 +24,10 @@ export function useCrudOperations<TAdd, TUpdate>(
     }
   };
 
-  const handleUpdate = async (id: string | undefined, fields: TUpdate) => {
+  const handleUpdate = async (params: any, fields: TUpdate) => {
     const hide = message.loading('正在修改');
     try {
-      await updateApi(id!, fields);
+      await updateApi(params, fields);
       hide();
       message.success('修改成功');
       return true;
@@ -37,10 +37,10 @@ export function useCrudOperations<TAdd, TUpdate>(
     }
   };
 
-  const handleDelete = async (ids: string) => {
+  const handleDelete = async (params: any) => {
     const hide = message.loading('正在删除');
     try {
-      await removeApi(ids);
+      await removeApi(params);
       hide();
       message.success('删除成功');
       return true;

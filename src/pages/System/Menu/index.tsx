@@ -54,7 +54,7 @@ const Menu: React.FC = () => {
             setCurrentRow(record);
           },
           handleDelete: async (id: string) => {
-            const success = await handleDelete(id!);
+            const success = await handleDelete({ ids: id! });
             if (success) {
               actionRef.current?.reload();
             }
@@ -81,7 +81,7 @@ const Menu: React.FC = () => {
         >
           <Button
             onClick={async () => {
-              await handleDelete(selectedRowsState.map((row) => row.id).join(','));
+              await handleDelete({ ids: selectedRowsState.map((row) => row.id).join(',') });
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -94,7 +94,7 @@ const Menu: React.FC = () => {
         title={'新建'}
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
-        onSubmit={async (value: API.MenuDTO) => {
+        onSubmit={async (value) => {
           const success = await handleAdd(value as API.MenuDTO);
           if (success) {
             handleCreateModalOpen(false);
@@ -109,7 +109,7 @@ const Menu: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value as API.MenuDTO);
+          const success = await handleUpdate({ id: currentRow?.id }, value as API.MenuDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

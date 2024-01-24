@@ -62,7 +62,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
             setCurrentRow(record);
           },
           handleDelete: async (id: string) => {
-            const success = await handleDelete(id!);
+            const success = await handleDelete({ ids: id! });
             if (success) {
               actionRef.current?.reload();
             }
@@ -89,7 +89,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
         >
           <Button
             onClick={async () => {
-              await handleDelete(selectedRowsState.map((row) => row.id).join(','));
+              await handleDelete({ ids: selectedRowsState.map((row) => row.id).join(',') });
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -117,7 +117,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ departmentId }: UsersTableProps
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value as API.UserDTO);
+          const success = await handleUpdate({ id: currentRow?.id }, value as API.UserDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

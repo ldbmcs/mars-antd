@@ -56,7 +56,7 @@ const Dept: React.FC = () => {
             setCurrentRow(record);
           },
           handleDelete: async (id: string) => {
-            const success = await handleDelete(id!);
+            const success = await handleDelete({ ids: id! });
             if (success) {
               actionRef.current?.reload();
             }
@@ -83,7 +83,7 @@ const Dept: React.FC = () => {
         >
           <Button
             onClick={async () => {
-              await handleDelete(selectedRowsState.map((row) => row.id).join(','));
+              await handleDelete({ ids: selectedRowsState.map((row) => row.id).join(',') });
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -109,7 +109,7 @@ const Dept: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate(currentRow?.id, value as API.DepartmentDTO);
+          const success = await handleUpdate({ id: currentRow?.id }, value as API.DepartmentDTO);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

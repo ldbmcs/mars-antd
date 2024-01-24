@@ -101,6 +101,7 @@ const MenuFormModel: React.FC<UpdateFormProps> = ({
           ]}
           rules={[{ required: true, message: '请选择类型' }]}
         />
+        <ProFormText width="md" name="icon" label={'icon'} />
       </ProForm.Group>
     </ModalForm>
   );
