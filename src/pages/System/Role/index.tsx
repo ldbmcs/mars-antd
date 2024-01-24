@@ -12,7 +12,7 @@ import type { ActionType } from '@ant-design/pro-components';
 import { FooterToolbar, PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import React, { useRef, useState } from 'react';
-import RoleFormModel from './components/RoleFormModel';
+import RoleFormModel, { FormValueType } from './components/RoleFormModel';
 
 const Role: React.FC = () => {
   const [createModalOpen, handleCreateModalOpen] = useState<boolean>(false);
@@ -27,6 +27,15 @@ const Role: React.FC = () => {
     deleteRolesUsingDelete,
     toggleRoleUsingPost,
   );
+
+  const transform = (data: FormValueType): API.RoleDTO => {
+    const { menuIds, ...rest } = data;
+    // @ts-ignore
+    return {
+      ...rest,
+      menuIds: menuIds?.map((item) => item.value) ?? [],
+    };
+  };
 
   return (
     <PageContainer>
@@ -102,7 +111,7 @@ const Role: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleAdd(value as API.RoleDTO);
+          const success = await handleAdd(transform(value));
           if (success) {
             handleCreateModalOpen(false);
             actionRef.current?.reload();
@@ -114,7 +123,7 @@ const Role: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
-          const success = await handleUpdate({ id: currentRow?.id }, value as API.RoleDTO);
+          const success = await handleUpdate({ id: currentRow?.id }, transform(value));
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

@@ -69,12 +69,11 @@ const RoleFormModel: React.FC<UpdateFormProps> = ({
           filterTreeNode: true,
           showSearch: true,
           popupMatchSelectWidth: false,
-          labelInValue: false,
           multiple: true,
           treeCheckable: true,
           autoClearSearchValue: true,
           treeNodeFilterProp: 'name',
-          showCheckedStrategy: 'SHOW_ALL',
+          treeCheckStrictly: true,
           fieldNames: {
             label: 'name',
             value: 'id',
