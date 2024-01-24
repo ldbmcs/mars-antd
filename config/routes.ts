@@ -33,6 +33,7 @@ export default [
         name: '用户管理',
         path: '/system/user',
         component: './System/User',
+        access: 'normalRouteFilter',
       },
       {
         name: '菜单管理',

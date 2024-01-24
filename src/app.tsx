@@ -9,10 +9,7 @@ import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
-import {
-  currentMenusUsingGet,
-  currentUserUsingGet,
-} from './services/ant-design-pro/authController';
+import { currentUserUsingGet } from './services/ant-design-pro/authController';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/login';
@@ -22,9 +19,9 @@ const loginPath = '/login';
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.SysUser;
+  currentUser?: API.SysUserVO;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.SysUser | undefined>;
+  fetchUserInfo?: () => Promise<API.SysUserVO | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -130,8 +127,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         userId: initialState?.currentUser?.id,
       },
       request: async (params, defaultMenuData) => {
-        const menuData = await currentMenusUsingGet();
-        defaultMenuData.push(...(menuData.data ?? []));
+        defaultMenuData.push(...(initialState?.currentUser?.menus ?? []));
         return defaultMenuData;
       },
     },

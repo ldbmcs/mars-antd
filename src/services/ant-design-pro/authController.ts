@@ -2,17 +2,9 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** currentMenus GET /api/auth/currentMenus */
-export async function currentMenusUsingGet(options?: { [key: string]: any }) {
-  return request<API.ApiResultListSysMenuVO_>('/api/auth/currentMenus', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
-
 /** currentUser GET /api/auth/currentUser */
 export async function currentUserUsingGet(options?: { [key: string]: any }) {
-  return request<API.ApiResultSysUser_>('/api/auth/currentUser', {
+  return request<API.ApiResultSysUserVO_>('/api/auth/currentUser', {
     method: 'GET',
     ...(options || {}),
   });

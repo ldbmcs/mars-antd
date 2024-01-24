@@ -34,8 +34,8 @@ declare namespace API {
     success?: boolean;
   };
 
-  type ApiResultSysUser_ = {
-    data?: SysUser;
+  type ApiResultSysUserVO_ = {
+    data?: SysUserVO;
     errorCode?: number;
     errorMessage?: string;
     success?: boolean;
@@ -171,17 +171,6 @@ declare namespace API {
     name?: string;
   };
 
-  type SysUser = {
-    createdAt?: string;
-    createdBy?: string;
-    departmentId?: string;
-    enabled?: boolean;
-    id?: string;
-    mobile?: string;
-    nickname?: string;
-    username?: string;
-  };
-
   type SysUserVO = {
     createdAt?: string;
     createdBy?: string;
@@ -189,6 +178,7 @@ declare namespace API {
     departmentName?: string;
     enabled?: boolean;
     id?: string;
+    menus?: SysMenuVO[];
     mobile?: string;
     nickname?: string;
     roleIds?: string;
