@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer';
 import { Question } from '@/components/RightContent';
+import { fixMenuItemIcon } from '@/utils/fixMenuItemIcon';
 import { RequestConfig } from '@@/plugin-request/request';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
@@ -8,7 +9,10 @@ import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
-import { currentUserUsingGet } from './services/ant-design-pro/authController';
+import {
+  currentMenusUsingGet,
+  currentUserUsingGet,
+} from './services/ant-design-pro/authController';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/login';
@@ -120,6 +124,19 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           />
         </>
       );
+    },
+    menu: {
+      params: {
+        userId: initialState?.currentUser?.id,
+      },
+      request: async (params, defaultMenuData) => {
+        const menuData = await currentMenusUsingGet();
+        defaultMenuData.push(...(menuData.data ?? []));
+        return defaultMenuData;
+      },
+    },
+    menuDataRender: (menuData) => {
+      return fixMenuItemIcon(menuData);
     },
     ...initialState?.settings,
   };

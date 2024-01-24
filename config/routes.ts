@@ -20,12 +20,14 @@ export default [
     path: '/dashboard',
     name: '概览',
     icon: 'dashboard',
+    hideInMenu: true,
     component: './Dashboard',
   },
   {
     name: '系统管理',
     icon: 'setting',
     path: '/system',
+    hideInMenu: true,
     routes: [
       {
         name: '用户管理',

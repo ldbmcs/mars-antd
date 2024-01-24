@@ -53,7 +53,7 @@ const RoleFormModel: React.FC<UpdateFormProps> = ({
         name="menuIds"
         label={'权限'}
         allowClear
-        width={330}
+        width="md"
         secondary
         request={async () => {
           return menus;
@@ -74,6 +74,7 @@ const RoleFormModel: React.FC<UpdateFormProps> = ({
           treeCheckable: true,
           autoClearSearchValue: true,
           treeNodeFilterProp: 'name',
+          showCheckedStrategy: 'SHOW_ALL',
           fieldNames: {
             label: 'name',
             value: 'id',

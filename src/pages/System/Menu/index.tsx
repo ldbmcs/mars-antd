@@ -31,6 +31,7 @@ const Menu: React.FC = () => {
     <PageContainer>
       <ProTable<API.SysMenuVO>
         headerTitle={'菜单列表'}
+        pagination={false}
         actionRef={actionRef}
         rowKey="id"
         search={{

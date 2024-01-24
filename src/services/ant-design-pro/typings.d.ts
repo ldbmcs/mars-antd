@@ -166,7 +166,8 @@ declare namespace API {
     createdBy?: string;
     enabled?: boolean;
     id?: string;
-    menuIds?: string;
+    menuIdStr?: string;
+    menuIds?: string[];
     name?: string;
   };
 

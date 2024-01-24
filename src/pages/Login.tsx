@@ -3,7 +3,7 @@ import { signInUsingPost } from '@/services/ant-design-pro/authController';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { FormattedMessage, history, useModel } from '@umijs/max';
+import { history, useModel } from '@umijs/max';
 import { message } from 'antd';
 import React from 'react';
 import { flushSync } from 'react-dom';
@@ -37,7 +37,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: API.SignInUserDTO) => {
     const result = await signInUsingPost({ ...values });
-    if (result.code === 200) {
+    if (result.success) {
       message.success('登录成功！');
       localStorage.setItem('token', result.data!.tokenValue ?? '');
       await fetchUserInfo();
@@ -110,14 +110,14 @@ const Login: React.FC = () => {
             }}
           >
             <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
+              {'自动登录'}
             </ProFormCheckbox>
             <a
               style={{
                 float: 'right',
               }}
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
+              {'忘记密码'}
             </a>
           </div>
         </LoginForm>

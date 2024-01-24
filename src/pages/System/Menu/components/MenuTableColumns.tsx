@@ -1,4 +1,3 @@
-import { SmileOutlined } from '@ant-design/icons';
 import { ProColumns } from '@ant-design/pro-components';
 import { Popconfirm, Switch, Tag } from 'antd';
 
@@ -31,13 +30,6 @@ export const menuTableColumns = ({
   {
     title: '菜单名称',
     dataIndex: 'name',
-  },
-  {
-    title: 'icon',
-    dataIndex: 'icon',
-    hideInForm: true,
-    hideInSearch: true,
-    render: () => <SmileOutlined />,
   },
   {
     title: '排序',
