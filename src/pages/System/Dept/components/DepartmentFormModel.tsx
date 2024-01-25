@@ -1,5 +1,5 @@
 import { listDepartmentsUsingGet } from '@/services/ant-design-pro/sysDepartmentController';
-import { ModalForm, ProFormDigit, ProFormText } from '@ant-design/pro-components';
+import { ModalForm, ProForm, ProFormDigit, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
 import { DataNode } from 'antd/es/tree';
 import React, { useEffect, useState } from 'react';
@@ -29,6 +29,12 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
 }) => {
   const [departments, setDepartments] = useState<DataNode[]>([]);
 
+  const [form] = ProForm.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(values);
+  }, [values, form]);
+
   function formatTreeList(list: API.SysDepartmentVO[]) {
     list.map((item) => {
       if (item['children']) {
@@ -57,7 +63,7 @@ const SaveOrUpdateUserDepartment: React.FC<UpdateFormProps> = ({
       open={open}
       onOpenChange={onOpenChange}
       onFinish={onSubmit}
-      initialValues={values}
+      form={form}
       width={'400px'}
     >
       <ProFormText

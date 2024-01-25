@@ -8,13 +8,21 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
-import React from 'react';
+import React, { useEffect } from 'react';
+
+export type FormValueType = {
+  target?: string;
+  template?: string;
+  type?: string;
+  time?: string;
+  frequency?: string;
+} & Partial<API.MenuDTO>;
 
 export type UpdateFormProps = {
   title: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: API.MenuDTO) => Promise<void>;
+  onSubmit: (values: FormValueType) => Promise<void>;
   values?: Partial<API.SysMenuVO>;
 };
 
@@ -27,13 +35,19 @@ const MenuFormModel: React.FC<UpdateFormProps> = ({
 }) => {
   const menus = useMenusTree(listMenusUsingGet);
 
+  const [form] = ProForm.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(values);
+  }, [values, form]);
+
   return (
     <ModalForm
       title={title}
       open={open}
       onOpenChange={onOpenChange}
       onFinish={onSubmit}
-      initialValues={values}
+      form={form}
     >
       <ProForm.Group>
         <ProFormText

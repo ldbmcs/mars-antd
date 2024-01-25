@@ -96,6 +96,7 @@ const Menu: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleCreateModalOpen}
         onSubmit={async (value) => {
+          // @ts-ignore
           const success = await handleAdd(value as API.MenuDTO);
           if (success) {
             handleCreateModalOpen(false);
@@ -110,6 +111,7 @@ const Menu: React.FC = () => {
         open={updateModalOpen}
         onOpenChange={handleUpdateModalOpen}
         onSubmit={async (value) => {
+          // @ts-ignore
           const success = await handleUpdate({ id: currentRow?.id }, value as API.MenuDTO);
           if (success) {
             handleUpdateModalOpen(false);

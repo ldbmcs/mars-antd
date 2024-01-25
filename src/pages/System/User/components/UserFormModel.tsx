@@ -4,7 +4,7 @@ import { listRolesUsingGet } from '@/services/ant-design-pro/sysRoleController';
 import { ModalForm, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
 import { RequestOptionsType } from '@ant-design/pro-utils/lib';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export type FormValueType = {
   target?: string;
@@ -31,6 +31,12 @@ const UserFormModel: React.FC<UpdateFormProps> = ({
 }) => {
   const departments = useDepartmentsTree(listDepartmentsUsingGet);
 
+  const [form] = ProForm.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(values);
+  }, [values, form]);
+
   const requestRoles = async (): Promise<RequestOptionsType[]> => {
     const response = await listRolesUsingGet({ current: 1, pageSize: 1000 });
     return (
@@ -46,7 +52,7 @@ const UserFormModel: React.FC<UpdateFormProps> = ({
       open={open}
       onOpenChange={onOpenChange}
       onFinish={onSubmit}
-      initialValues={values}
+      form={form}
     >
       <ProForm.Group>
         <ProFormText

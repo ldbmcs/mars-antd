@@ -1,8 +1,8 @@
 import useMenusTree from '@/hooks/useMenusTree';
 import { listMenusUsingGet } from '@/services/ant-design-pro/sysMenuController';
-import { ModalForm, ProFormText } from '@ant-design/pro-components';
+import { ModalForm, ProForm, ProFormText } from '@ant-design/pro-components';
 import { ProFormTreeSelect } from '@ant-design/pro-form/lib';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export type FormValueType = {
   target?: string;
@@ -28,14 +28,18 @@ const RoleFormModel: React.FC<UpdateFormProps> = ({
   onOpenChange,
 }) => {
   const menus = useMenusTree(listMenusUsingGet);
+  const [form] = ProForm.useForm();
 
+  useEffect(() => {
+    form.setFieldsValue(values);
+  }, [values, form]);
   return (
     <ModalForm
       title={title}
       open={open}
       onOpenChange={onOpenChange}
       onFinish={onSubmit}
-      initialValues={values}
+      form={form}
       width={'400px'}
     >
       <ProFormText
